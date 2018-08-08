@@ -1,10 +1,7 @@
-import React, { Component } from "react";
+import React from "react";
 
-class Nav extends Component {
-  state = { topics: {} };
-  render() {
-    return <div>placeholder</div>;
-  }
-}
+const Nav = () => {
+  return <div />;
+};
 
 export default Nav;

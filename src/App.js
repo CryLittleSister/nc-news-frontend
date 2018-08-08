@@ -1,24 +1,48 @@
 import React, { Component } from "react";
 import "./App.css";
+import { Route, Switch } from "react-router-dom";
+import Homepage from "./components/Homepage";
+import Header from "./components/Header";
+import Error404 from "./components/Error404";
+import UserBar from "./components/UserBar";
+import Articles from "./components/Articles";
 
 class App extends Component {
+  state = {
+    currentTopic: {},
+    currentArticle: {},
+    currentUser: {},
+    currentComment: {}
+  };
+
+  componentDidMount() {}
+
   render() {
     return (
       <div className="App">
-        <header className="App-header">
-          <img
-            src="https://northcoders.com/images/logos/learn_to_code_manchester_rw_logo.png"
-            className="App-logo"
-            alt="logo"
+        <Header />
+        <UserBar
+          setCurrentUser={this.setCurrentUser}
+          currentUser={this.state.currentUser}
+        />
+        <Switch>
+          <Route path="/articles" render={() => <Articles />} />
+          <Route
+            exact
+            path="/"
+            render={() => {
+              return <Homepage />;
+            }}
           />
-          <h1 className="App-title">Welcome to React</h1>
-        </header>
-        <p className="App-intro">
-          To get started, edit <code>src/App.js</code> and save to reload.
-        </p>
+          <Route path="/*" component={Error404} />
+        </Switch>
       </div>
     );
   }
+
+  setCurrentUser = user => {
+    this.setState({ currentUser: user });
+  };
 }
 
 export default App;
