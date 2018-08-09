@@ -26,7 +26,12 @@ class App extends Component {
           logout={this.logout}
         />
         <Switch>
-          <Route path="/articles" render={() => <Articles />} />
+          <Route
+            path="/articles"
+            render={props => (
+              <Articles currentArticle={this.state.currentArticle} />
+            )}
+          />
           <Route
             exact
             path="/"
@@ -43,6 +48,8 @@ class App extends Component {
   setCurrentUser = user => {
     this.setState({ currentUser: user });
   };
+
+  // setCurrentArticle = article => this.setState({ currentArticle: article });
 
   logout = () => {
     console.log("clicked");

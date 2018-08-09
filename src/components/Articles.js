@@ -1,14 +1,18 @@
 import React, { Component } from "react";
+import { Route } from "react-router-dom";
 import axios from "axios";
 import Topics from "./Topics";
-import DisplayArticles from "./DisplayArticles";
+import DisplayArticlesByTopic from "./DisplayArticlesByTopic";
+import * as api from "../api";
+import Article from "./Article";
 
 class Articles extends Component {
   state = {
     articles: [],
     comments: [],
     topics: [],
-    currentTopic: ""
+    currentTopic: "",
+    voteChange: 0
     /*current user etc fed from App. also send a method which allows changing of app state of current user/article etc */
   };
 
@@ -16,8 +20,11 @@ class Articles extends Component {
     this.getTopics();
   }
 
-  componentDidUpdate(prevProps) {
-    this.state.currentTopic && this.getArticlesByTopic(this.state.currentTopic);
+  componentDidUpdate(prevProps, prevState) {
+    console.log("updating...");
+    if (prevState.currentTopic !== this.state.currentTopic)
+      this.state.currentTopic &&
+        this.getArticlesByTopic(this.state.currentTopic);
   }
 
   render() {
@@ -29,9 +36,16 @@ class Articles extends Component {
             topics={this.state.topics}
           />
         }
-        <DisplayArticles
-          articles={this.state.articles}
-          handleClick={this.handleVoteClick}
+        <DisplayArticlesByTopic articles={this.state.articles} />
+        <Route
+          path="/articles/:article_id"
+          render={props => (
+            <Article
+              {...props}
+              voteChange={this.state.voteChange}
+              handleClick={this.handleArticleVote}
+            />
+          )}
         />
       </div>
     );
@@ -41,16 +55,12 @@ class Articles extends Component {
     this.setState({ currentTopic: e.target.id });
   };
 
-  handleVoteClick = (article, vote) => {
-    console.log(this.state.articles[0], "<<<<<<<<<<<<b4");
-    axios
-      .put(
-        `https://tg-northcoders-news.herokuapp.com/api/articles/${
-          article._id
-        }?vote=${vote}`
-      )
-      .then(this.getArticlesByTopic(this.state.currentTopic)
-        console.log(this.state.articles[0], "<<<<<<<<<<<<afta"));
+  handleArticleVote = (id, direction) => {
+    api.handleVote(id, direction, "articles").then(
+      this.setState({
+        voteChange: direction === "up" ? 1 : -1
+      })
+    );
   };
 
   getArticlesByTopic = topic => {
