@@ -4,7 +4,7 @@ import UserInfo from "./UserInfo";
 import axios from "axios";
 
 class UserBar extends Component {
-  state = { users: [] };
+  state = { users: [], username: "", password: "" };
 
   componentDidMount() {
     axios
@@ -18,11 +18,39 @@ class UserBar extends Component {
     const { currentUser } = this.props;
     return (
       <div>
-        {currentUser.username && <UserInfo user={currentUser} />}
-        {!currentUser.username && <Login />}
+        {currentUser.username && (
+          <UserInfo logout={this.props.logout} user={currentUser} />
+        )}
+        {!currentUser.username && (
+          <Login
+            handleChange={this.handleChange}
+            handleLogin={this.handleLogin}
+          />
+        )}
       </div>
     );
   }
+
+  handleLogin = e => {
+    e.preventDefault();
+    const { username, password } = this.state;
+    let userCheck = null;
+
+    this.state.users.forEach(user => {
+      if (user.username === username) userCheck = user;
+    });
+    !userCheck
+      ? alert("There are no users with that username")
+      : // : userCheck.password !== password
+        //   ? alert("Incorrect password. Please try again")
+        this.props.setCurrentUser(userCheck);
+  };
+
+  handleChange = e => {
+    e.target.id === "username"
+      ? this.setState({ username: e.target.value })
+      : this.setState({ password: e.target.value });
+  };
 }
 
 export default UserBar;

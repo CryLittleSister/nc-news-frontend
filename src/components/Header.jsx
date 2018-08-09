@@ -14,10 +14,7 @@ const Header = () => {
       </Link>
       <h1 className="App-title">News</h1>
       {/* Navbar to be contained in header which appears on all pages. Conditional rendering to specify which page we're on or a lower h2? */}
-      <Link to="/">
-        filtering components? link to articles which lets you select a topic at
-        this point?
-      </Link>
+      <Link to="/articles">articles</Link>
     </header>
   );
 };

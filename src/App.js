@@ -9,7 +9,6 @@ import Articles from "./components/Articles";
 
 class App extends Component {
   state = {
-    currentTopic: {},
     currentArticle: {},
     currentUser: {},
     currentComment: {}
@@ -24,6 +23,7 @@ class App extends Component {
         <UserBar
           setCurrentUser={this.setCurrentUser}
           currentUser={this.state.currentUser}
+          logout={this.logout}
         />
         <Switch>
           <Route path="/articles" render={() => <Articles />} />
@@ -42,6 +42,11 @@ class App extends Component {
 
   setCurrentUser = user => {
     this.setState({ currentUser: user });
+  };
+
+  logout = () => {
+    console.log("clicked");
+    this.setState({ currentUser: {} });
   };
 }
 
