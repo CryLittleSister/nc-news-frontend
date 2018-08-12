@@ -46,10 +46,12 @@ class UserBar extends Component {
         this.props.setCurrentUser(userCheck);
   };
 
-  handleChange = e => {
-    e.target.id === "username"
-      ? this.setState({ username: e.target.value })
-      : this.setState({ password: e.target.value });
+  handleChange = event => {
+    let key = event.target.id;
+    let val = event.target.value;
+    let obj = {};
+    obj[key] = val;
+    this.setState(obj);
   };
 }
 

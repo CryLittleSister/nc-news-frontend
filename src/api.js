@@ -26,3 +26,19 @@ export const getComments = articleID => {
     .get(`${URL}/articles/${articleID}/comments`)
     .then(data => data.data.comments);
 };
+
+export const postArticle = (topic, title, body, user) => {
+  return axios
+    .post(`${URL}/topics/${topic}/articles`, {
+      title,
+      body,
+      created_by: user
+    })
+    .then(data => data.data.article);
+};
+
+export const postComment = (body, user, article) => {
+  return axios
+    .post(`${URL}/articles/${article}/comments`, { body, created_by: user })
+    .then(data => console.log(data.data));
+};

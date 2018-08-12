@@ -1,16 +1,11 @@
 import React from "react";
 
-const PostArticle = ({
-  currentUser,
-  currentTopic,
-  postArticle
-  /*postArticle will be a method */
-}) => {
+const PostArticle = ({ postArticle, handleChange }) => {
   return (
     <div>
       <form>
-        <select>
-          <option value="" disabled selected>
+        <select id="topicDropdownInput" onChange={handleChange}>
+          <option selected disabled>
             Choose a topic
           </option>
           <option value="coding">coding</option>
@@ -18,13 +13,20 @@ const PostArticle = ({
           <option value="football">football</option>
         </select>{" "}
         <br />
-        <input placeholder="article title" /> <br />
+        <input
+          id="articleTitleInput"
+          onChange={handleChange}
+          placeholder="article title"
+        />{" "}
+        <br />
         <textarea
+          id="articleBodyInput"
+          onChange={handleChange}
           placeholder="type your article into here"
           rows="25"
           cols="50"
         />
-        <button>POST ARTICLE</button>
+        <button onClick={postArticle}>POST ARTICLE</button>
       </form>
     </div>
   );

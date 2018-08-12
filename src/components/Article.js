@@ -1,15 +1,19 @@
 import React, { Component } from "react";
-import { getSingleItem, getComments } from "../api";
-import PostComment from "./PostComment";
-import Vote from "./Vote";
 import * as api from "../api";
+import Vote from "./Vote";
 
 class Article extends Component {
-  state = { article: {}, comments: [], voteChange: 0 };
+  state = {
+    article: {},
+    comments: [],
+    voteChange: 0,
+    commentBodyInput: "",
+    commentsAdded: 0
+  };
 
   componentDidMount() {
     const { match } = this.props;
-    getSingleItem(match.params.article_id, "articles").then(article => {
+    api.getSingleItem(match.params.article_id, "articles").then(article => {
       this.setState({ article });
     });
   }
@@ -29,9 +33,17 @@ class Article extends Component {
         <button onClick={this.showComments}>
           {this.state.comments.length === 0 ? "comments" : "hide comments"}
         </button>
+        ({article.comments + this.state.commentsAdded}) <br />
+        <input
+          onChange={this.handleChange}
+          placeholder="add comment..."
+          value={this.state.commentBodyInput}
+          id="commentBodyInput"
+        />
+        <button onClick={this.postComment}>post</button>
         {this.state.comments.map(comment => {
           return (
-            <div>
+            <div key={comment._id}>
               <p>{comment.body}</p>
               score: {comment.votes + voteChange}
               <Vote
@@ -51,14 +63,34 @@ class Article extends Component {
 
   showComments = () => {
     this.state.comments.length === 0
-      ? getComments(this.state.article._id).then(comments =>
-          this.setState({ comments })
-        )
+      ? api
+          .getComments(this.state.article._id)
+          .then(comments => this.setState({ comments }))
       : this.setState({ comments: [] });
   };
 
+  postComment = e => {
+    e.preventDefault();
+    !this.props.user._id
+      ? alert("you must be logged in to post a new comment")
+      : !this.state.commentBodyInput
+        ? alert("comments cannot be blank")
+        : api
+            .postComment(
+              this.state.commentBodyInput,
+              this.props.user._id,
+              this.state.article._id
+            )
+            .then(() => {
+              alert("new comment successfully added!");
+              this.setState({
+                commentBodyInput: "",
+                commentsAdded: (this.state.commentsAdded += 1)
+              });
+            });
+  };
+
   vote = (id, direction, item) => {
-    console.log("clicked...");
     api
       .handleVote(id, direction, item)
       .then(
@@ -67,6 +99,14 @@ class Article extends Component {
         })
       )
       .catch(err => console.log(err));
+  };
+
+  handleChange = e => {
+    let key = e.target.id;
+    let val = e.target.value;
+    let obj = {};
+    obj[key] = val;
+    this.setState(obj);
   };
 }
 
