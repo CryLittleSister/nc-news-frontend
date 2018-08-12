@@ -29,7 +29,10 @@ class App extends Component {
           <Route
             path="/articles"
             render={props => (
-              <Articles currentArticle={this.state.currentArticle} />
+              <Articles
+                currentArticle={this.state.currentArticle}
+                currentUser={this.state.currentUser}
+              />
             )}
           />
           <Route

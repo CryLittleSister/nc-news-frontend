@@ -5,15 +5,13 @@ import Topics from "./Topics";
 import DisplayArticlesByTopic from "./DisplayArticlesByTopic";
 import * as api from "../api";
 import Article from "./Article";
+import PostArticle from "./PostArticle";
 
 class Articles extends Component {
   state = {
     articles: [],
     comments: [],
-    topics: [],
-    currentTopic: "",
-    voteChange: 0
-    /*current user etc fed from App. also send a method which allows changing of app state of current user/article etc */
+    topics: []
   };
 
   componentDidMount() {
@@ -21,7 +19,6 @@ class Articles extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    console.log("updating...");
     if (prevState.currentTopic !== this.state.currentTopic)
       this.state.currentTopic &&
         this.getArticlesByTopic(this.state.currentTopic);
@@ -36,31 +33,26 @@ class Articles extends Component {
             topics={this.state.topics}
           />
         }
-        <DisplayArticlesByTopic articles={this.state.articles} />
         <Route
-          path="/articles/:article_id"
+          path="/articles/topics/:topic"
           render={props => (
-            <Article
-              {...props}
-              voteChange={this.state.voteChange}
-              handleClick={this.handleArticleVote}
-            />
+            <DisplayArticlesByTopic articles={this.state.articles} {...props} />
           )}
+        />
+
+        <Route
+          path="/articles/article/:article_id"
+          render={props => <Article {...props} />}
+        />
+        <Route
+          path="/articles/new"
+          render={() => <PostArticle user={this.props.currentUser} />}
         />
       </div>
     );
   }
-
   handleTopicClick = e => {
     this.setState({ currentTopic: e.target.id });
-  };
-
-  handleArticleVote = (id, direction) => {
-    api.handleVote(id, direction, "articles").then(
-      this.setState({
-        voteChange: direction === "up" ? 1 : -1
-      })
-    );
   };
 
   getArticlesByTopic = topic => {
@@ -80,8 +72,6 @@ class Articles extends Component {
         this.setState({ topics: data.topics });
       });
   };
-
-  vote = () => {};
 }
-/* any methods that create, delete or edit articles and comments will live here. all voting lives here too */
+
 export default Articles;
