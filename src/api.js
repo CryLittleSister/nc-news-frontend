@@ -3,7 +3,6 @@ import axios from "axios";
 const URL = "https://tg-northcoders-news.herokuapp.com/api";
 
 export const handleVote = (id, direction, item) => {
-  console.log(item, "<<<<", direction, ">>>>>");
   return axios
     .put(`${URL}/${item}/${id}?vote=${direction}`)
     .then(data => data.data);
@@ -37,8 +36,18 @@ export const postArticle = (topic, title, body, user) => {
     .then(data => data.data.article);
 };
 
-export const postComment = (body, user, article) => {
+export const postComment = (body, userID, articleID) => {
   return axios
-    .post(`${URL}/articles/${article}/comments`, { body, created_by: user })
-    .then(data => console.log(data.data));
+    .post(`${URL}/articles/${articleID}/comments`, { body, created_by: userID })
+    .then(data => data.data.comment);
+};
+
+export const deleteComment = id => {
+  return axios.delete(`${URL}/comments/${id}`).then(data => data.data.comment);
+};
+
+export const getUsers = () => {
+  return axios
+    .get("https://tg-northcoders-news.herokuapp.com/api/users")
+    .then(data => data.data.users);
 };

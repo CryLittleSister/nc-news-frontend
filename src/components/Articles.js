@@ -38,7 +38,13 @@ class Articles extends Component {
 
         <Route
           path="/articles/article/:article_id"
-          render={props => <Article user={this.props.currentUser} {...props} />}
+          render={props => (
+            <Article
+              user={this.props.currentUser}
+              users={this.props.users}
+              {...props}
+            />
+          )}
         />
         <Route
           path="/articles/new"

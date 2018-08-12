@@ -4,15 +4,7 @@ import UserInfo from "./UserInfo";
 import axios from "axios";
 
 class UserBar extends Component {
-  state = { users: [], username: "", password: "" };
-
-  componentDidMount() {
-    axios
-      .get("https://tg-northcoders-news.herokuapp.com/api/users")
-      .then(({ data }) => {
-        this.setState({ users: data.users });
-      });
-  }
+  state = { username: "", password: "" };
 
   render() {
     const { currentUser } = this.props;
@@ -36,7 +28,7 @@ class UserBar extends Component {
     const { username, password } = this.state;
     let userCheck = null;
 
-    this.state.users.forEach(user => {
+    this.props.users.forEach(user => {
       if (user.username === username) userCheck = user;
     });
     !userCheck

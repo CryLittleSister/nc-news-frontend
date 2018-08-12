@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import * as api from "../api";
 import Vote from "./Vote";
+import Comments from "./Comments";
 
 class Article extends Component {
   state = {
@@ -28,7 +29,8 @@ class Article extends Component {
         score: {article.votes + voteChange}
         <Vote handleClick={this.vote} item={article} itemType="articles" />
         <p className="smallerText">
-          posted at: {article.created_at} by: {article.created_by}
+          posted on: {new Date(article.created_at).toString()} by:{" "}
+          {this.convertUsernameFromID(article.created_by)}
         </p>
         <button onClick={this.showComments}>
           {this.state.comments.length === 0 ? "comments" : "hide comments"}
@@ -41,22 +43,13 @@ class Article extends Component {
           id="commentBodyInput"
         />
         <button onClick={this.postComment}>post</button>
-        {this.state.comments.map(comment => {
-          return (
-            <div key={comment._id}>
-              <p>{comment.body}</p>
-              score: {comment.votes + voteChange}
-              <Vote
-                handleClick={this.vote}
-                item={comment}
-                itemType="comments"
-              />
-              <p className="smallerText">
-                posted at: {comment.created_at} by: {comment.created_by}
-              </p>
-            </div>
-          );
-        })}
+        <Comments
+          convert={this.convertUsernameFromID}
+          comments={this.state.comments}
+          vote={this.vote}
+          user={this.props.user._id}
+          deleteComment={this.deleteComment}
+        />
       </div>
     );
   }
@@ -107,6 +100,21 @@ class Article extends Component {
     let obj = {};
     obj[key] = val;
     this.setState(obj);
+  };
+
+  deleteComment = e => {
+    if (window.confirm("Are you sure you want to delete this comment?"))
+      api
+        .deleteComment(e.target.id)
+        .then(alert("comment successfully deleted!"));
+  };
+
+  convertUsernameFromID = id => {
+    let key = {};
+    this.props.users.forEach(user => {
+      key[`${user._id}`] = user.username;
+    });
+    return key[`${id}`];
   };
 }
 

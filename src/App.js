@@ -6,21 +6,26 @@ import Header from "./components/Header";
 import Error404 from "./components/Error404";
 import UserBar from "./components/UserBar";
 import Articles from "./components/Articles";
+import { getUsers } from "./api";
 
 class App extends Component {
   state = {
-    currentArticle: {},
     currentUser: {},
-    currentComment: {}
+    users: []
   };
 
-  componentDidMount() {}
+  componentDidMount() {
+    getUsers().then(users => {
+      this.setState({ users });
+    });
+  }
 
   render() {
     return (
       <div className="App">
         <Header />
         <UserBar
+          users={this.state.users}
           setCurrentUser={this.setCurrentUser}
           currentUser={this.state.currentUser}
           logout={this.logout}
@@ -32,6 +37,7 @@ class App extends Component {
               <Articles
                 currentArticle={this.state.currentArticle}
                 currentUser={this.state.currentUser}
+                users={this.state.users}
               />
             )}
           />
