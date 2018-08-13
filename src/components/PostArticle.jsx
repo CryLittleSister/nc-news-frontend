@@ -1,6 +1,9 @@
 import React from "react";
+import { Redirect } from "react-router-dom";
+import PT from "prop-types";
 
-const PostArticle = ({ postArticle, handleChange }) => {
+const PostArticle = ({ postArticle, handleChange, redirect, newArticle }) => {
+  if (redirect) return <Redirect to={`/articles/article/${newArticle._id}`} />;
   return (
     <div>
       <form>
@@ -12,7 +15,6 @@ const PostArticle = ({ postArticle, handleChange }) => {
           <option value="cooking">cooking</option>
           <option value="football">football</option>
         </select>{" "}
-        <br />
         <input
           id="articleTitleInput"
           onChange={handleChange}
@@ -26,10 +28,18 @@ const PostArticle = ({ postArticle, handleChange }) => {
           rows="25"
           cols="50"
         />
+        <br />
         <button onClick={postArticle}>POST ARTICLE</button>
       </form>
     </div>
   );
+};
+
+PostArticle.propTypes = {
+  postArticle: PT.func.isRequired,
+  handleChange: PT.func.isRequired,
+  redirect: PT.bool,
+  newArticle: PT.object
 };
 
 export default PostArticle;

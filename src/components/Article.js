@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import * as api from "../api";
 import Vote from "./Vote";
 import Comments from "./Comments";
+import PT from "prop-types";
 
 class Article extends Component {
   state = {
@@ -23,7 +24,7 @@ class Article extends Component {
     const { article, voteChange } = this.state;
     if (!article.title) return <div>loading...</div>;
     return (
-      <div key={article._id}>
+      <div id="article" key={article._id}>
         <h2>{article.title}</h2>
         <article>{article.body}</article>
         score: {article.votes + voteChange}
@@ -32,7 +33,7 @@ class Article extends Component {
           posted on: {new Date(article.created_at).toString()} by:{" "}
           {this.convertUsernameFromID(article.created_by)}
         </p>
-        <button onClick={this.showComments}>
+        <button className="myButton" onClick={this.showComments}>
           {this.state.comments.length === 0 ? "comments" : "hide comments"}
         </button>
         ({article.comments + this.state.commentsAdded}) <br />
@@ -75,10 +76,11 @@ class Article extends Component {
               this.state.article._id
             )
             .then(() => {
+              let num = this.state.commentsAdded;
               alert("new comment successfully added!");
               this.setState({
                 commentBodyInput: "",
-                commentsAdded: (this.state.commentsAdded += 1)
+                commentsAdded: (num += 1)
               });
             });
   };
@@ -117,5 +119,9 @@ class Article extends Component {
     return key[`${id}`];
   };
 }
+Article.propTypes = {
+  user: PT.object,
+  users: PT.array.isRequired
+};
 
 export default Article;

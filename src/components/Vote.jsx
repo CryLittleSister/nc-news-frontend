@@ -1,4 +1,5 @@
 import React from "react";
+import PT from "prop-types";
 
 const Vote = ({ handleClick, item, itemType }) => {
   return (
@@ -15,6 +16,12 @@ const Vote = ({ handleClick, item, itemType }) => {
       </button>
     </div>
   );
+};
+
+Vote.propTypes = {
+  handleClick: PT.func.isRequired,
+  item: PT.object.isRequired,
+  itemType: PT.string.isRequired
 };
 
 export default Vote;

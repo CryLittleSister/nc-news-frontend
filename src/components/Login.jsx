@@ -1,4 +1,5 @@
 import React from "react";
+import PT from "prop-types";
 
 const Login = ({ handleLogin, handleChange }) => {
   return (
@@ -21,6 +22,11 @@ const Login = ({ handleLogin, handleChange }) => {
       </form>
     </div>
   );
+};
+
+Login.propTypes = {
+  handleChange: PT.func.isRequired,
+  handleLogin: PT.func.isRequired
 };
 
 export default Login;

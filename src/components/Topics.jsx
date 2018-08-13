@@ -1,7 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import PT from "prop-types";
 
-const Topics = ({ topics }) => {
+const Topics = ({ topics }, p) => {
   return (
     <div>
       {topics.sort((a, b) => a.title > b.title).map(topic => (
@@ -14,9 +15,15 @@ const Topics = ({ topics }) => {
         </Link>
       ))}
       <br />
-      <Link to="/articles/new">POST NEW ARTICLE</Link>
+      <Link className="link" to="/articles/new">
+        POST NEW ARTICLE
+      </Link>
     </div>
   );
+};
+
+Topics.propTypes = {
+  topics: PT.array.isRequired
 };
 
 export default Topics;

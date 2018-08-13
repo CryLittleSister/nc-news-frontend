@@ -38,6 +38,7 @@ class App extends Component {
                 currentArticle={this.state.currentArticle}
                 currentUser={this.state.currentUser}
                 users={this.state.users}
+                handleChange={this.handleChange}
               />
             )}
           />
@@ -57,8 +58,6 @@ class App extends Component {
   setCurrentUser = user => {
     this.setState({ currentUser: user });
   };
-
-  // setCurrentArticle = article => this.setState({ currentArticle: article });
 
   logout = () => {
     console.log("clicked");

@@ -1,5 +1,6 @@
 import React from "react";
 import Vote from "./Vote";
+import PT from "prop-types";
 
 const Comments = ({ comments, vote, user, deleteComment, convert }) => {
   return (
@@ -24,6 +25,14 @@ const Comments = ({ comments, vote, user, deleteComment, convert }) => {
       })}
     </div>
   );
+};
+
+Comments.propTypes = {
+  convert: PT.func.isRequired,
+  vote: PT.func.isRequired,
+  deleteComment: PT.func.isRequired,
+  comments: PT.array.isRequired,
+  user: PT.string
 };
 
 export default Comments;

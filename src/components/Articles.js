@@ -1,11 +1,12 @@
 import React, { Component } from "react";
-import { Route, Redirect } from "react-router-dom";
+import { Route } from "react-router-dom";
 import axios from "axios";
 import Topics from "./Topics";
 import DisplayArticlesByTopic from "./DisplayArticlesByTopic";
 import * as api from "../api";
 import Article from "./Article";
 import PostArticle from "./PostArticle";
+import PT from "prop-types";
 
 class Articles extends Component {
   state = {
@@ -16,7 +17,7 @@ class Articles extends Component {
     articleBodyInput: "",
     topicDropdownInput: "",
     redirect: false,
-    newArticle: ""
+    newArticle: {}
   };
 
   componentDidMount() {
@@ -24,10 +25,8 @@ class Articles extends Component {
   }
 
   render() {
-    if (this.state.redirect)
-      return <Redirect to={`/articles/article/${this.state.newArticle._id}`} />;
     return (
-      <div>
+      <div className="articles">
         {<Topics topics={this.state.topics} />}
         <Route
           path="/articles/topics/:topic"
@@ -50,9 +49,11 @@ class Articles extends Component {
           path="/articles/new"
           render={() => (
             <PostArticle
+              redirect={this.state.redirect}
+              newArticle={this.state.newArticle}
               user={this.props.currentUser}
               postArticle={this.postArticle}
-              handleChange={this.handleChange}
+              handleChange={this.props.handleChange}
             />
           )}
         />
@@ -117,5 +118,11 @@ class Articles extends Component {
     this.setState(obj);
   };
 }
+
+Articles.propTypes = {
+  currentArticle: PT.object,
+  currentUser: PT.object,
+  users: PT.array.isRequired
+};
 
 export default Articles;

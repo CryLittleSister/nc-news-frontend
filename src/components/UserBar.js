@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Login from "./Login";
 import UserInfo from "./UserInfo";
-import axios from "axios";
+import PT from "prop-types";
 
 class UserBar extends Component {
   state = { username: "", password: "" };
@@ -25,7 +25,7 @@ class UserBar extends Component {
 
   handleLogin = e => {
     e.preventDefault();
-    const { username, password } = this.state;
+    const { username } = this.state;
     let userCheck = null;
 
     this.props.users.forEach(user => {
@@ -46,5 +46,9 @@ class UserBar extends Component {
     this.setState(obj);
   };
 }
+
+UserBar.propTypes = {
+  currentUser: PT.object
+};
 
 export default UserBar;
