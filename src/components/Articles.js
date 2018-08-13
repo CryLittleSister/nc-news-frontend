@@ -53,7 +53,7 @@ class Articles extends Component {
               newArticle={this.state.newArticle}
               user={this.props.currentUser}
               postArticle={this.postArticle}
-              handleChange={this.props.handleChange}
+              handleChange={this.handleChange}
             />
           )}
         />
