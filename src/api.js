@@ -44,10 +44,6 @@ export const deleteComment = id => {
   return axios.delete(`${URL}/comments/${id}`).then(data => data.data.comment);
 };
 
-export const getUsers = () => {
-  return axios.get(`${URL}/users`).then(data => data.data.users);
-};
-
-export const getTopics = () => {
-  return axios.get(`${URL}/topics`);
+export const getAll = item => {
+  return axios.get(`${URL}/${item}`).then(({ data }) => data);
 };

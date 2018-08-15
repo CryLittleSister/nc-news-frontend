@@ -21,9 +21,7 @@ class App extends Component {
   };
 
   componentDidMount() {
-    api.getUsers().then(users => {
-      this.setState({ users });
-    });
+    this.getUsers();
   }
 
   render() {
@@ -127,6 +125,12 @@ class App extends Component {
     let obj = {};
     obj[key] = val;
     this.setState(obj);
+  };
+
+  getUsers = () => {
+    api.getAll("users").then(users => {
+      this.setState({ users });
+    });
   };
 }
 

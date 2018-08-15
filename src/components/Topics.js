@@ -10,6 +10,7 @@ class Topics extends Component {
   }
 
   render() {
+    console.log(this.state.topics, "***", Array.isArray(this.state.topics));
     return (
       <div>
         {this.state.topics.sort((a, b) => a.title > b.title).map(topic => (
@@ -26,8 +27,8 @@ class Topics extends Component {
   }
 
   getTopics = () => {
-    api.getTopics().then(({ data }) => {
-      this.setState({ topics: data.topics });
+    api.getAll("topics").then(({ topics }) => {
+      this.setState({ topics });
     });
   };
 }
