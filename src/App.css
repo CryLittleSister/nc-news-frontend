@@ -41,6 +41,7 @@ h2 {
 }
 
 .articleList {
+  text-align: center;
   display: grid;
 }
 
@@ -61,8 +62,6 @@ h2 {
 }
 
 button {
-  -moz-box-shadow: 0px 10px 14px -7px #e82536;
-  -webkit-box-shadow: 0px 10px 14px -7px #e82536;
   box-shadow: 0px 10px 14px -7px #e82536;
   background: -webkit-gradient(
     linear,
@@ -78,8 +77,7 @@ button {
   background: linear-gradient(to bottom, #66101c 5%, #e83d09 100%);
   filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#66101c', endColorstr='#e83d09',GradientType=0);
   background-color: #66101c;
-  -moz-border-radius: 8px;
-  -webkit-border-radius: 8px;
+
   border-radius: 8px;
   display: inline-block;
   cursor: pointer;

@@ -10,10 +10,9 @@ class UserBar extends Component {
     const { currentUser } = this.props;
     return (
       <div>
-        {currentUser.username && (
+        {currentUser.username ? (
           <UserInfo logout={this.props.logout} user={currentUser} />
-        )}
-        {!currentUser.username && (
+        ) : (
           <Login
             handleChange={this.handleChange}
             handleLogin={this.handleLogin}

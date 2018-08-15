@@ -69,13 +69,7 @@ class App extends Component {
               />
             )}
           />
-          <Route
-            exact
-            path="/"
-            render={() => {
-              return <Homepage />;
-            }}
-          />
+          <Route exact path="/" component={<Homepage />} />
           <Route path="/*" component={Error404} />
         </Switch>
       </div>
@@ -87,7 +81,6 @@ class App extends Component {
   };
 
   logout = () => {
-    console.log("clicked");
     this.setState({ currentUser: {} });
   };
 
@@ -128,7 +121,7 @@ class App extends Component {
   };
 
   getUsers = () => {
-    api.getAll("users").then(users => {
+    api.getAll("users").then(({ users }) => {
       this.setState({ users });
     });
   };

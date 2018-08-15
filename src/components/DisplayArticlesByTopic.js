@@ -10,7 +10,6 @@ class DisplayArticlesByTopic extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log("updating...");
     const { topic } = this.props.match.params;
     if (topic !== prevProps.match.params.topic) this.getArticles(topic);
   }
