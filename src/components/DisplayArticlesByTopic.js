@@ -1,26 +1,18 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
-import { getArticlesByTopic } from "../api";
-import PT from "prop-types";
+import * as api from "../api";
 
 class DisplayArticlesByTopic extends Component {
   state = { articles: [] };
 
   componentDidMount() {
-    const { topic } = this.props.match.params;
-    getArticlesByTopic(topic).then(articles => this.setState({ articles }));
+    this.getArticles();
   }
 
   componentDidUpdate(prevProps) {
+    console.log("updating...");
     const { topic } = this.props.match.params;
-    if (topic !== prevProps.match.params.topic) {
-      getArticlesByTopic(topic).then(articles => {
-        this.setState({
-          articles,
-          topic
-        });
-      });
-    }
+    if (topic !== prevProps.match.params.topic) this.getArticles(topic);
   }
 
   render() {
@@ -31,7 +23,7 @@ class DisplayArticlesByTopic extends Component {
             <Link
               key={article._id}
               className="articleTitles"
-              to={`/articles/article/${article._id}`}
+              to={`/article/${article._id}`}
             >
               <h2>{article.title}</h2>
             </Link>
@@ -40,10 +32,11 @@ class DisplayArticlesByTopic extends Component {
       </div>
     );
   }
-}
 
-DisplayArticlesByTopic.propTypes = {
-  articles: PT.array.isRequired
-};
+  getArticles = () => {
+    const { topic } = this.props.match.params;
+    api.getArticlesByTopic(topic).then(articles => this.setState({ articles }));
+  };
+}
 
 export default DisplayArticlesByTopic;

@@ -14,9 +14,7 @@ export const getSingleItem = (id, item) => {
 
 export const getArticlesByTopic = topic => {
   return axios
-    .get(
-      `https://tg-northcoders-news.herokuapp.com/api/topics/${topic}/articles`
-    )
+    .get(`${URL}/topics/${topic}/articles`)
     .then(data => data.data.articles);
 };
 
@@ -47,7 +45,9 @@ export const deleteComment = id => {
 };
 
 export const getUsers = () => {
-  return axios
-    .get("https://tg-northcoders-news.herokuapp.com/api/users")
-    .then(data => data.data.users);
+  return axios.get(`${URL}/users`).then(data => data.data.users);
+};
+
+export const getTopics = () => {
+  return axios.get(`${URL}/topics`);
 };

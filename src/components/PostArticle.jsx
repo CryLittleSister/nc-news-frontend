@@ -3,9 +3,9 @@ import { Redirect } from "react-router-dom";
 import PT from "prop-types";
 
 const PostArticle = ({ postArticle, handleChange, redirect, newArticle }) => {
-  if (redirect) return <Redirect to={`/articles/article/${newArticle._id}`} />;
+  if (redirect) return <Redirect to={`/article/${newArticle._id}`} />;
   return (
-    <div>
+    <div className="articles">
       <form>
         <select id="topicDropdownInput" onChange={handleChange}>
           <option selected disabled>
