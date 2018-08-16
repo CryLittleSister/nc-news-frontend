@@ -16,7 +16,7 @@ class App extends Component {
   state = {
     currentUser: {},
     users: [],
-    newArticle: {},
+    newPost: {},
     redirect: false
   };
 
@@ -41,7 +41,7 @@ class App extends Component {
             path="/articles/post"
             render={() => (
               <PostArticle
-                newArticle={this.state.newArticle}
+                newArticle={this.state.newPost}
                 redirect={this.state.redirect}
                 postArticle={this.postArticle}
                 handleChange={this.handleChange}
@@ -69,7 +69,7 @@ class App extends Component {
               />
             )}
           />
-          <Route exact path="/" component={<Homepage />} />
+          <Route exact path="/" component={Homepage} />
           <Route path="/*" component={Error404} />
         </Switch>
       </div>
@@ -103,7 +103,7 @@ class App extends Component {
                 )
                 .then(article =>
                   this.setState({
-                    newArticle: article,
+                    newPost: article,
                     topicDropdownInput: "",
                     articleTitleInput: "",
                     articleBodyInput: "",

@@ -33,17 +33,22 @@ class Article extends Component {
           posted on: {new Date(article.created_at).toString()} by:{" "}
           {this.convertUsernameFromID(article.created_by)}
         </p>
-        <button className="myButton" onClick={this.showComments}>
+        <button
+          className="myButton"
+          onClick={() => this.showComments(article.comments)}
+        >
           {this.state.comments.length === 0 ? "comments" : "hide comments"}
         </button>
         ({article.comments + this.state.commentsAdded}) <br />
-        <input
-          onChange={this.handleChange}
-          placeholder="add comment..."
-          value={this.state.commentBodyInput}
-          id="commentBodyInput"
-        />
-        <button onClick={this.postComment}>post</button>
+        <form>
+          <input
+            onChange={this.handleChange}
+            placeholder="add comment..."
+            value={this.state.commentBodyInput}
+            id="commentBodyInput"
+          />
+          <button onClick={this.postComment}>post</button>
+        </form>
         <Comments
           convert={this.convertUsernameFromID}
           comments={this.state.comments}
@@ -55,8 +60,8 @@ class Article extends Component {
     );
   }
 
-  showComments = () => {
-    this.state.comments.length === 0
+  showComments = articleComments => {
+    this.state.comments.length === 0 && articleComments !== 0
       ? api
           .getComments(this.state.article._id)
           .then(comments => this.setState({ comments }))
@@ -75,25 +80,30 @@ class Article extends Component {
               this.props.user._id,
               this.state.article._id
             )
-            .then(() => {
+            .then(newComment => {
+              let comments = [...this.state.comments];
+              comments.push(newComment);
               let num = this.state.commentsAdded;
-              alert("new comment successfully added!");
               this.setState({
                 commentBodyInput: "",
-                commentsAdded: (num += 1)
+                commentsAdded: (num += 1),
+                comments
               });
             });
   };
 
   vote = (id, direction, item) => {
-    api
-      .handleVote(id, direction, item)
-      .then(
-        this.setState({
-          voteChange: direction === "up" ? 1 : -1
-        })
-      )
-      .catch(err => console.log(err));
+    let { user } = this.props;
+
+    let voteChange =
+      direction === "up"
+        ? this.state.voteChange + 1
+        : this.state.voteChange - 1;
+
+    api.handleVote(id, direction, item);
+    this.setState({
+      voteChange
+    });
   };
 
   handleChange = e => {
@@ -105,10 +115,14 @@ class Article extends Component {
   };
 
   deleteComment = e => {
+    let num = this.state.commentsAdded;
+    let comments = [...this.state.comments].filter(
+      comment => comment._id !== e.target.id
+    );
     if (window.confirm("Are you sure you want to delete this comment?"))
       api
         .deleteComment(e.target.id)
-        .then(alert("comment successfully deleted!"));
+        .then(this.setState({ comments, commentsAdded: (num -= 1) }));
   };
 
   convertUsernameFromID = id => {

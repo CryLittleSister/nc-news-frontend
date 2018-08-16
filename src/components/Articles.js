@@ -14,7 +14,6 @@ class Articles extends Component {
   }
 
   render() {
-    console.log(this.state.articles);
     return this.state.articles.map(article => (
       <div key={article._id} className="articleList">
         <Link className="articleTitles" to={`/article/${article._id}`}>
