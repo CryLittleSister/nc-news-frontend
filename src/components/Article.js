@@ -8,7 +8,7 @@ class Article extends Component {
   state = {
     article: {},
     comments: [],
-    voteChange: 0,
+    voteChange: { comments: {}, articles: {} },
     commentBodyInput: "",
     commentsAdded: 0
   };
@@ -27,7 +27,7 @@ class Article extends Component {
       <div id="article" key={article._id}>
         <h2>{article.title}</h2>
         <article>{article.body}</article>
-        score: {article.votes + voteChange}
+        score: {article.votes + (voteChange.articles[article._id] || 0)}
         <Vote handleClick={this.vote} item={article} itemType="articles" />
         <p className="smallerText">
           posted on: {new Date(article.created_at).toString()} by:{" "}
@@ -55,6 +55,7 @@ class Article extends Component {
           vote={this.vote}
           user={this.props.user._id}
           deleteComment={this.deleteComment}
+          voteChange={this.state.voteChange.comments}
         />
       </div>
     );
@@ -93,17 +94,17 @@ class Article extends Component {
   };
 
   vote = (id, direction, item) => {
-    let { user } = this.props;
+    let voteChange = { ...this.state.voteChange };
 
-    let voteChange =
-      direction === "up"
-        ? this.state.voteChange + 1
-        : this.state.voteChange - 1;
-
-    api.handleVote(id, direction, item);
-    this.setState({
-      voteChange
-    });
+    let { user } = { ...this.props };
+    if (!user.username) alert("you must be logged in to cast your vote");
+    else if (!user.votes[item][id]) {
+      user.votes[item][id] = direction === "up" ? 1 : -1;
+      voteChange[item][id] = direction === "up" ? 1 : -1;
+      api.handleVote(id, direction, user._id, item);
+      console.log(voteChange);
+      this.setState({ user, voteChange });
+    }
   };
 
   handleChange = e => {

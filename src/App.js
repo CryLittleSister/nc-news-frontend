@@ -9,7 +9,6 @@ import Articles from "./components/Articles";
 import Article from "./components/Article";
 import PostArticle from "./components/PostArticle";
 import Topics from "./components/Topics";
-import DisplayArticlesByTopic from "./components/DisplayArticlesByTopic";
 import * as api from "./api";
 
 class App extends Component {
@@ -17,11 +16,19 @@ class App extends Component {
     currentUser: {},
     users: [],
     newPost: {},
-    redirect: false
+    redirect: false,
+    articles: [],
+    sortBy: "votes"
   };
 
   componentDidMount() {
     this.getUsers();
+    this.getSortedArticles(this.state.sortBy);
+  }
+
+  componentDidUpdate(...args) {
+    if (this.state.sortBy !== args[1].sortBy)
+      this.getSortedArticles(this.state.sortBy);
   }
 
   render() {
@@ -36,7 +43,7 @@ class App extends Component {
         />
         <Topics />
         <Switch>
-          <Route path="/topics/:topic" component={DisplayArticlesByTopic} />
+          <Route path="/topics/:topic" component={Articles} />
           <Route
             path="/articles/post"
             render={() => (
@@ -48,17 +55,7 @@ class App extends Component {
               />
             )}
           />
-          <Route
-            path="/articles"
-            render={props => (
-              <Articles
-                currentArticle={this.state.currentArticle}
-                currentUser={this.state.currentUser}
-                users={this.state.users}
-                handleChange={this.handleChange}
-              />
-            )}
-          />
+          <Route path="/articles" component={Articles} />
           <Route
             path="/article/:article_id"
             render={props => (
@@ -69,7 +66,17 @@ class App extends Component {
               />
             )}
           />
-          <Route exact path="/" component={Homepage} />
+          <Route
+            exact
+            path="/"
+            render={props => (
+              <Homepage
+                articles={this.state.articles}
+                sortBy={this.state.sortBy}
+                sort={this.sort}
+              />
+            )}
+          />
           <Route path="/*" component={Error404} />
         </Switch>
       </div>
@@ -82,6 +89,23 @@ class App extends Component {
 
   logout = () => {
     this.setState({ currentUser: {} });
+  };
+
+  sort = e => {
+    let sortBy = e.target.id;
+    this.setState({ sortBy });
+  };
+
+  getSortedArticles = sortBy => {
+    api.getAll("articles").then(({ articles }) => {
+      let sorted =
+        sortBy === "created_at"
+          ? articles.sort((a, b) => new Date(b[sortBy]) - new Date(a[sortBy]))
+          : articles.sort((a, b) => b[sortBy] - a[sortBy]);
+
+      articles = sorted.slice(0, 3);
+      this.setState({ articles });
+    });
   };
 
   postArticle = e => {

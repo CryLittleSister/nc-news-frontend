@@ -15,7 +15,7 @@ const UserInfo = ({ user, logout }) => {
             }}
             alt="user avatar"
           />
-          <h3>{user.username}</h3>
+          <h3 id="loggedUsername">{user.username}</h3>
           <button onClick={logout}>logout</button>
         </div>
       )}
