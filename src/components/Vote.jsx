@@ -11,7 +11,7 @@ const Vote = ({ handleClick, item, itemType }) => {
       >
         vote up
       </button>
-      <button onClick={() => handleClick(item._id, "down", `${itemType}`)}>
+      <button onClick={() => handleClick(item._id, "down", itemType)}>
         vote down
       </button>
     </div>

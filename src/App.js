@@ -13,7 +13,7 @@ import * as api from "./api";
 
 class App extends Component {
   state = {
-    currentUser: {},
+    currentUser: { votes: { articles: {}, comments: {} } },
     users: [],
     newPost: {},
     redirect: false,
@@ -22,6 +22,8 @@ class App extends Component {
   };
 
   componentDidMount() {
+    if (JSON.parse(localStorage.getItem("currentUser")))
+      this.setCurrentUser(JSON.parse(localStorage.getItem("currentUser")));
     this.getUsers();
     this.getSortedArticles(this.state.sortBy);
   }
@@ -41,7 +43,7 @@ class App extends Component {
           currentUser={this.state.currentUser}
           logout={this.logout}
         />
-        <Topics />
+
         <Switch>
           <Route path="/topics/:topic" component={Articles} />
           <Route
@@ -84,10 +86,14 @@ class App extends Component {
   }
 
   setCurrentUser = user => {
-    this.setState({ currentUser: user });
+    localStorage.setItem("currentUser", JSON.stringify(user));
+    api
+      .getSingleItem(user, "users")
+      .then(({ user }) => this.setState({ currentUser: user }));
   };
 
   logout = () => {
+    localStorage.removeItem("currentUser");
     this.setState({ currentUser: {} });
   };
 

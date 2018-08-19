@@ -2,14 +2,18 @@ import axios from "axios";
 
 const URL = "https://tg-northcoders-news.herokuapp.com/api";
 
-export const handleVote = (id, direction, user, item) => {
+export const handleVote = (id, direction, user, item, undo) => {
   return axios
-    .put(`${URL}/${item}/${id}?vote=${direction}&user_id=${user}`)
+    .put(
+      `${URL}/${item}/${id}?vote=${direction}&user_id=${user}${
+        undo ? "&&undo=true" : ""
+      }`
+    )
     .then(({ data }) => data);
 };
 
 export const getSingleItem = (id, item) => {
-  return axios.get(`${URL}/${item}/${id}`).then(({ data }) => data.article);
+  return axios.get(`${URL}/${item}/${id}`).then(({ data }) => data);
 };
 
 export const getArticlesByTopic = topic => {

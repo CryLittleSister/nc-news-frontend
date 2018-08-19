@@ -14,11 +14,13 @@ class Topics extends Component {
       <div>
         {this.state.topics.sort((a, b) => a.title > b.title).map(topic => (
           <Link to={`/topics/${topic.slug}`} id={topic.slug} key={topic._id}>
-            <button>{topic.title}</button>
+            <button disabled={this.props.disabled === topic.slug}>
+              {topic.title}
+            </button>
           </Link>
         ))}{" "}
         <Link to="/articles">
-          <button>All</button>
+          <button disabled={this.props.disabled === "all"}>All</button>
         </Link>
         <br />
         <Link className="link" to="/articles/post">

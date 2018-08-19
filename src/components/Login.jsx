@@ -6,6 +6,7 @@ const Login = ({ handleLogin, handleChange }) => {
     <div>
       <form>
         <input
+          autoFocus
           type="text"
           id="username"
           placeholder="enter username"

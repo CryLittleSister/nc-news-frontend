@@ -9,7 +9,7 @@ class UserBar extends Component {
   render() {
     const { currentUser } = this.props;
     return (
-      <div>
+      <div id="userBar">
         {currentUser.username ? (
           <UserInfo logout={this.props.logout} user={currentUser} />
         ) : (
@@ -28,7 +28,7 @@ class UserBar extends Component {
     let userCheck = null;
 
     this.props.users.forEach(user => {
-      if (user.username === username) userCheck = user;
+      if (user.username === username.toLowerCase()) userCheck = user._id;
     });
     !userCheck
       ? alert("There are no users with that username")

@@ -58,6 +58,12 @@
   padding: 0px;
 }
 
+.alert {
+  color: red;
+  font-style: italic;
+  font-weight: normal;
+}
+
 #loggedUsername {
   margin-left: 10px;
   font-size: 30px;
@@ -146,11 +152,15 @@ button:active {
   position: relative;
   top: 1px;
 }
-/* button:disabled {
+button:disabled {
   border: 1px solid #999999;
   background-color: #cccccc;
   color: #666666;
-} */
+}
+#userBar {
+  text-align: right;
+  padding-right: 30px;
+}
 
 /* flexgrow: 1 
 on child */

@@ -3,6 +3,7 @@ import * as api from "../api";
 import Vote from "./Vote";
 import Comments from "./Comments";
 import PT from "prop-types";
+import UndoVote from "./UndoVote";
 
 class Article extends Component {
   state = {
@@ -15,9 +16,11 @@ class Article extends Component {
 
   componentDidMount() {
     const { match } = this.props;
-    api.getSingleItem(match.params.article_id, "articles").then(article => {
-      this.setState({ article });
-    });
+    api
+      .getSingleItem(match.params.article_id, "articles")
+      .then(({ article }) => {
+        this.setState({ article });
+      });
   }
 
   render() {
@@ -28,7 +31,19 @@ class Article extends Component {
         <h2>{article.title}</h2>
         <article>{article.body}</article>
         score: {article.votes + (voteChange.articles[article._id] || 0)}
-        <Vote handleClick={this.vote} item={article} itemType="articles" />
+        {!this.props.user.votes ||
+        !this.props.user.votes.articles[article._id] ? (
+          <Vote handleClick={this.vote} item={article} itemType="articles" />
+        ) : (
+          <UndoVote
+            handleClick={this.vote}
+            dir={
+              this.props.user.votes.articles[article._id] === 1 ? "down" : "up"
+            }
+            id={article._id}
+            itemType="articles"
+          />
+        )}
         <p className="smallerText">
           posted on: {new Date(article.created_at).toString()} by:{" "}
           {this.convertUsernameFromID(article.created_by)}
@@ -53,7 +68,7 @@ class Article extends Component {
           convert={this.convertUsernameFromID}
           comments={this.state.comments}
           vote={this.vote}
-          user={this.props.user._id}
+          user={this.props.user}
           deleteComment={this.deleteComment}
           voteChange={this.state.voteChange.comments}
         />
@@ -62,6 +77,7 @@ class Article extends Component {
   }
 
   showComments = articleComments => {
+    console.log(!this.state.test);
     this.state.comments.length === 0 && articleComments !== 0
       ? api
           .getComments(this.state.article._id)
@@ -95,16 +111,29 @@ class Article extends Component {
 
   vote = (id, direction, item) => {
     let voteChange = { ...this.state.voteChange };
-
     let { user } = { ...this.props };
+    voteChange[item][id] = user.votes[item][id];
+    console.log(voteChange[item][id], "<<<<b4");
     if (!user.username) alert("you must be logged in to cast your vote");
     else if (!user.votes[item][id]) {
       user.votes[item][id] = direction === "up" ? 1 : -1;
       voteChange[item][id] = direction === "up" ? 1 : -1;
       api.handleVote(id, direction, user._id, item);
-      console.log(voteChange);
-      this.setState({ user, voteChange });
+      this.setState({ voteChange });
+    } else {
+      console.log(2);
+      user.votes[item][id] =
+        direction === "up"
+          ? user.votes[item][id] + 1
+          : user.votes[item][id] - 1;
+      voteChange[item][id] =
+        direction === "up"
+          ? voteChange[item][id] + 1
+          : voteChange[item][id] - 1;
+      api.handleVote(id, direction, user._id, item, true);
+      this.setState({ voteChange });
     }
+    console.log(voteChange[item][id], "<<<<afta");
   };
 
   handleChange = e => {

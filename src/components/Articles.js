@@ -1,22 +1,28 @@
 import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import * as api from "../api";
+import Topics from "./Topics";
 
 class Articles extends Component {
   state = { articles: [] };
 
   componentDidMount() {
+    document.getElementById("username").focus();
     this.getArticles();
   }
 
   componentDidUpdate(prevProps) {
     const { topic } = this.props.match.params;
-    if (topic !== prevProps.match.params.topic) this.getArticles();
+    if (topic !== prevProps.match.params.topic) {
+      document.getElementById("username").focus();
+      this.getArticles();
+    }
   }
 
   render() {
     return (
       <div className="articleList">
+        <Topics disabled={this.props.match.params.topic || "all"} />
         {this.state.articles.map(article => {
           return (
             <Link
@@ -44,14 +50,8 @@ class Articles extends Component {
     let set = ({ articles }) => this.setState({ articles });
 
     !topic
-      ? api
-          .getAll("articles")
-          .then(set)
-          .then(console.log(this.state.articles))
-      : api
-          .getArticlesByTopic(topic)
-          .then(set)
-          .then(console.log(this.state.articles));
+      ? api.getAll("articles").then(set)
+      : api.getArticlesByTopic(topic).then(set);
   };
 }
 

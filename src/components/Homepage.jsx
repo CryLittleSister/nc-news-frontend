@@ -11,6 +11,7 @@ const Homepage = ({ articles, sortBy, sort }) => {
             ? "Most Talked About Articles"
             : "Most Recent Articles"}
       </h1>{" "}
+      sort by <br />
       <button onClick={sort} id="votes">
         highest scores
       </button>
