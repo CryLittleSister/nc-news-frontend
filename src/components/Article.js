@@ -4,6 +4,7 @@ import Vote from "./Vote";
 import Comments from "./Comments";
 import PT from "prop-types";
 import UndoVote from "./UndoVote";
+import { Redirect } from "react-router-dom";
 
 class Article extends Component {
   state = {
@@ -26,6 +27,7 @@ class Article extends Component {
   render() {
     const { article, voteChange } = this.state;
     if (!article.title) return <div>loading...</div>;
+    if (this.state.redirect) return <Redirect to={`/articles`} />;
     return (
       <div id="article" key={article._id}>
         <h2>{article.title}</h2>
@@ -43,6 +45,11 @@ class Article extends Component {
             id={article._id}
             itemType="articles"
           />
+        )}
+        {article.created_by === this.props.user._id && (
+          <button id={article._id} onClick={this.deleteArticle}>
+            DELETE ARTICLE
+          </button>
         )}
         <p className="smallerText">
           posted on: {new Date(article.created_at).toString()} by:{" "}
@@ -151,8 +158,15 @@ class Article extends Component {
     );
     if (window.confirm("Are you sure you want to delete this comment?"))
       api
-        .deleteComment(e.target.id)
+        .deleteItem(e.target.id, "comments")
         .then(this.setState({ comments, commentsAdded: (num -= 1) }));
+  };
+
+  deleteArticle = e => {
+    if (window.confirm("Are you sure you want to delete this article?"))
+      api
+        .deleteItem(e.target.id, "articles")
+        .then(this.setState({ redirect: true }));
   };
 
   convertUsernameFromID = id => {

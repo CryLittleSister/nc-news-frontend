@@ -42,9 +42,11 @@ export const postComment = (body, userID, articleID) => {
     .then(({ data }) => data.comment);
 };
 
-export const deleteComment = id => {
-  return axios.delete(`${URL}/comments/${id}`).then(({ data }) => data.comment);
+export const deleteItem = (id, item) => {
+  return axios.delete(`${URL}/${item}/${id}`).then(({ data }) => data);
 };
+
+export const deleteArticle = id => axios.delete(`${URL}/articles `);
 
 export const getAll = item => {
   return axios.get(`${URL}/${item}`).then(({ data }) => data);

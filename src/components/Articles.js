@@ -7,14 +7,12 @@ class Articles extends Component {
   state = { articles: [] };
 
   componentDidMount() {
-    document.getElementById("username").focus();
     this.getArticles();
   }
 
   componentDidUpdate(prevProps) {
     const { topic } = this.props.match.params;
     if (topic !== prevProps.match.params.topic) {
-      document.getElementById("username").focus();
       this.getArticles();
     }
   }
