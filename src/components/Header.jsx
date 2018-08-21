@@ -9,7 +9,7 @@ const Header = () => {
         <img
           src="https://northcoders.com/images/logos/learn_to_code_manchester_rw_second.png"
           className="App-logo"
-          alt="logo"
+          alt="northcoders logo"
         />
       </Link>
       <h1 className="App-title">News</h1>

@@ -32,6 +32,9 @@ class Article extends Component {
     if (this.state.redirect) return <Redirect to={`/articles`} />;
     return (
       <div id="article" key={article._id}>
+        <Link to="/articles">
+          <i class="fas fa-arrow-left">Back to Articles</i>
+        </Link>
         <h2>{article.title}</h2>
         <article>{article.body}</article>
         score:{" "}
