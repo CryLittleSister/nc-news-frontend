@@ -16,6 +16,7 @@ class UserBar extends Component {
           <Login
             handleChange={this.handleChange}
             handleLogin={this.handleLogin}
+            password={this.state.password}
           />
         )}
       </div>
@@ -24,17 +25,17 @@ class UserBar extends Component {
 
   handleLogin = e => {
     e.preventDefault();
-    const { username } = this.state;
+    const { username, password } = this.state;
     let userCheck = null;
-
+    console.log(password);
     this.props.users.forEach(user => {
-      if (user.username === username.toLowerCase()) userCheck = user._id;
+      if (user.username === username.toLowerCase()) userCheck = user;
     });
     !userCheck
       ? alert("There are no users with that username")
-      : // : userCheck.password !== password
-        //   ? alert("Incorrect password. Please try again")
-        this.props.setCurrentUser(userCheck);
+      : userCheck.password !== password
+        ? alert("Incorrect password. Please try again")
+        : this.props.setCurrentUser(userCheck._id);
   };
 
   handleChange = event => {

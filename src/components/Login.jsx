@@ -1,7 +1,7 @@
 import React from "react";
 import PT from "prop-types";
 
-const Login = ({ handleLogin, handleChange }) => {
+const Login = ({ handleLogin, handleChange, password }) => {
   return (
     <div>
       <form>
@@ -13,7 +13,7 @@ const Login = ({ handleLogin, handleChange }) => {
           onChange={handleChange}
         />
         <input
-          type="text"
+          type="password"
           id="password"
           placeholder="enter password"
           onChange={handleChange}
