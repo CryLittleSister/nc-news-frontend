@@ -4,7 +4,7 @@ import Vote from "./Vote";
 import Comments from "./Comments";
 import PT from "prop-types";
 import UndoVote from "./UndoVote";
-import { Redirect } from "react-router-dom";
+import { Redirect, Link } from "react-router-dom";
 import moment from "moment";
 
 class Article extends Component {
@@ -14,7 +14,7 @@ class Article extends Component {
     voteChange: { comments: {}, articles: {} },
     commentBodyInput: "",
     commentsAdded: 0,
-    className: ""
+    className: { comments: {}, articles: {} }
   };
 
   componentDidMount() {
@@ -35,7 +35,13 @@ class Article extends Component {
         <h2>{article.title}</h2>
         <article>{article.body}</article>
         score:{" "}
-        <span className={this.state.className}>
+        <span
+          className={
+            this.props.user.votes &&
+            this.props.user.votes.articles[article._id] &&
+            "voted"
+          }
+        >
           {article.votes + (voteChange.articles[article._id] || 0)}
         </span>
         {!this.props.user.votes ||
@@ -61,7 +67,11 @@ class Article extends Component {
           {moment(article.created_at)
             .fromNow()
             .toString()}{" "}
-          by <i> {this.convertUsernameFromID(article.created_by)} </i>
+          by{" "}
+          <Link to={`/users/${article.created_by}`}>
+            {" "}
+            {this.convertUsernameFromID(article.created_by)}{" "}
+          </Link>
         </p>
         <button
           className="myButton"
@@ -92,7 +102,10 @@ class Article extends Component {
   }
 
   showComments = articleComments => {
-    console.log(!this.state.test);
+    var myName = prompt("Name Here:", "");
+    var myAge = prompt("Age Here: ", "");
+    alert(myName + ", you are " + myAge + " years old!");
+
     this.state.comments.length === 0 && articleComments !== 0
       ? api
           .getComments(this.state.article._id)
@@ -128,15 +141,15 @@ class Article extends Component {
     let voteChange = { ...this.state.voteChange };
     let { user } = { ...this.props };
     voteChange[item][id] = user.votes[item][id];
-    console.log(voteChange[item][id], "<<<<b4");
+
     if (!user.username) alert("you must be logged in to cast your vote");
     else if (!user.votes[item][id]) {
       user.votes[item][id] = direction === "up" ? 1 : -1;
       voteChange[item][id] = direction === "up" ? 1 : -1;
       api.handleVote(id, direction, user._id, item);
+
       this.setState({ voteChange });
     } else {
-      console.log(2);
       user.votes[item][id] =
         direction === "up"
           ? user.votes[item][id] + 1
@@ -148,7 +161,6 @@ class Article extends Component {
       api.handleVote(id, direction, user._id, item, true);
       this.setState({ voteChange });
     }
-    console.log(voteChange[item][id], "<<<<afta");
   };
 
   handleChange = e => {

@@ -8,7 +8,7 @@ import UserBar from "./components/UserBar";
 import Articles from "./components/Articles";
 import Article from "./components/Article";
 import PostArticle from "./components/PostArticle";
-import Topics from "./components/Topics";
+import User from "./components/User";
 import * as api from "./api";
 
 class App extends Component {
@@ -68,6 +68,7 @@ class App extends Component {
               />
             )}
           />
+          <Route path="/users/:user_id" component={User} />
           <Route
             exact
             path="/"
@@ -104,13 +105,12 @@ class App extends Component {
 
   getSortedArticles = sortBy => {
     api.getAll("articles").then(({ articles }) => {
-      let sorted =
+      let sortFunc =
         sortBy === "created_at"
-          ? articles.sort((a, b) => new Date(b[sortBy]) - new Date(a[sortBy]))
-          : articles.sort((a, b) => b[sortBy] - a[sortBy]);
+          ? (a, b) => new Date(b[sortBy]) - new Date(a[sortBy])
+          : (a, b) => b[sortBy] - a[sortBy];
 
-      articles = sorted.slice(0, 3);
-      this.setState({ articles });
+      this.setState({ articles: articles.sort(sortFunc).slice(0, 3) });
     });
   };
 

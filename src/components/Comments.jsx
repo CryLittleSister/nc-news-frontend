@@ -3,6 +3,7 @@ import Vote from "./Vote";
 import PT from "prop-types";
 import UndoVote from "./UndoVote";
 import moment from "moment";
+import { Link } from "react-router-dom";
 
 const Comments = ({
   comments,
@@ -20,7 +21,12 @@ const Comments = ({
           return (
             <div key={comment._id}>
               <p>{comment.body}</p>
-              score: {comment.votes + (voteChange[comment._id] || 0)}
+              score:{" "}
+              <span
+                className={user && user.votes.comments[comment._id] && "voted"}
+              >
+                {comment.votes + (voteChange[comment._id] || 0)}{" "}
+              </span>
               {!user.votes || !user.votes.comments[comment._id] ? (
                 <Vote handleClick={vote} item={comment} itemType="comments" />
               ) : (
@@ -36,7 +42,10 @@ const Comments = ({
                 {moment(comment.created_at)
                   .fromNow()
                   .toString()}{" "}
-                by <i>{convert(comment.created_by)}</i>
+                by{" "}
+                <Link to={`/users/${comment.created_by}`}>
+                  {convert(comment.created_by)}
+                </Link>
               </p>
               {comment.created_by === user._id && (
                 <button id={comment._id} onClick={deleteComment}>

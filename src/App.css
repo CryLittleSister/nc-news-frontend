@@ -37,6 +37,31 @@
   grid-template-columns: 30% 70%;
 }
 
+#userInfo {
+  display: grid;
+  grid-template-columns: 40% 60%;
+  grid-template-rows: 40% 60%;
+}
+
+#userPic {
+  height: 500px;
+  width: 100%;
+  grid-row: 1/2;
+  grid-column: 1/2;
+}
+
+#userText {
+  padding-left: 20px;
+  grid-column: 2/3;
+  grid-row: 1/2;
+}
+
+#userArticles {
+  font-size: 25px;
+  text-decoration: none;
+  color: pink;
+}
+
 .articleImage {
   height: 350px;
   width: 350px;
@@ -102,6 +127,10 @@ h1 {
 .smallerText {
   font-family: "Montserrat", sans-serif;
   font-size: 10px;
+}
+
+#userUsername {
+  font-size: 40px;
 }
 
 .midText {

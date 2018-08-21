@@ -1,20 +1,24 @@
 import React from "react";
 import PT from "prop-types";
+import { Link } from "react-router-dom";
 
 const UserInfo = ({ user, logout }) => {
   return (
     <div>
       {user && (
         <div>
-          <img
-            className="avatar"
-            src={user.avatar_url}
-            onError={e => {
-              e.target.src =
-                "https://i.pinimg.com/736x/54/51/b1/5451b1758687ce3e6e6ecee798b396f8--little-miss-plush.jpg";
-            }}
-            alt="user avatar"
-          />
+          <Link to={`/users/${user._id}`}>
+            <img
+              className="avatar"
+              src={user.avatar_url}
+              onError={e => {
+                e.target.src =
+                  "https://i.pinimg.com/736x/54/51/b1/5451b1758687ce3e6e6ecee798b396f8--little-miss-plush.jpg";
+              }}
+              alt="user avatar"
+            />
+          </Link>
+
           <h3 id="loggedUsername">{user.username}</h3>
           <button onClick={logout}>logout</button>
         </div>
