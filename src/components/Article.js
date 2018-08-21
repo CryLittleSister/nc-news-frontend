@@ -102,10 +102,6 @@ class Article extends Component {
   }
 
   showComments = articleComments => {
-    var myName = prompt("Name Here:", "");
-    var myAge = prompt("Age Here: ", "");
-    alert(myName + ", you are " + myAge + " years old!");
-
     this.state.comments.length === 0 && articleComments !== 0
       ? api
           .getComments(this.state.article._id)
