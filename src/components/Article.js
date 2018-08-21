@@ -5,6 +5,7 @@ import Comments from "./Comments";
 import PT from "prop-types";
 import UndoVote from "./UndoVote";
 import { Redirect } from "react-router-dom";
+import moment from "moment";
 
 class Article extends Component {
   state = {
@@ -12,7 +13,8 @@ class Article extends Component {
     comments: [],
     voteChange: { comments: {}, articles: {} },
     commentBodyInput: "",
-    commentsAdded: 0
+    commentsAdded: 0,
+    className: ""
   };
 
   componentDidMount() {
@@ -32,7 +34,10 @@ class Article extends Component {
       <div id="article" key={article._id}>
         <h2>{article.title}</h2>
         <article>{article.body}</article>
-        score: {article.votes + (voteChange.articles[article._id] || 0)}
+        score:{" "}
+        <span className={this.state.className}>
+          {article.votes + (voteChange.articles[article._id] || 0)}
+        </span>
         {!this.props.user.votes ||
         !this.props.user.votes.articles[article._id] ? (
           <Vote handleClick={this.vote} item={article} itemType="articles" />
@@ -52,8 +57,11 @@ class Article extends Component {
           </button>
         )}
         <p className="smallerText">
-          posted on: {new Date(article.created_at).toString()} by:{" "}
-          {this.convertUsernameFromID(article.created_by)}
+          posted{" "}
+          {moment(article.created_at)
+            .fromNow()
+            .toString()}{" "}
+          by <i> {this.convertUsernameFromID(article.created_by)} </i>
         </p>
         <button
           className="myButton"

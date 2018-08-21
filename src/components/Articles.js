@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Link } from "react-router-dom";
 import * as api from "../api";
 import Topics from "./Topics";
+import moment from "moment";
 
 class Articles extends Component {
   state = { articles: [] };
@@ -34,7 +35,9 @@ class Articles extends Component {
                 votes | <b>{article.comments}</b> comments
               </p>
               <p className="smallerText">
-                {new Date(article.created_at).toString()}
+                {moment(article.created_at)
+                  .format("ddd DD MMM YYYY ")
+                  .toString()}
               </p>
             </Link>
           );

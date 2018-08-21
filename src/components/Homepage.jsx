@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import moment from "moment";
 
 const Homepage = ({ articles, sortBy, sort }) => {
   return (
@@ -41,7 +42,9 @@ const Homepage = ({ articles, sortBy, sort }) => {
                 votes | <b>{article.comments}</b> comments
               </p>
               <p className="smallerText">
-                {new Date(article.created_at).toString()}
+                {moment(article.created_at)
+                  .format("ddd DD MMM YYYY ")
+                  .toString()}
               </p>
             </div>
           </div>

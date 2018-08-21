@@ -75,6 +75,10 @@ h1 {
   text-align: center;
 }
 
+.voted {
+  color: red;
+}
+
 #article {
   text-align: center;
 }

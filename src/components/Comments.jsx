@@ -2,6 +2,7 @@ import React from "react";
 import Vote from "./Vote";
 import PT from "prop-types";
 import UndoVote from "./UndoVote";
+import moment from "moment";
 
 const Comments = ({
   comments,
@@ -31,8 +32,11 @@ const Comments = ({
                 />
               )}
               <p className="smallerText">
-                posted on: {new Date(comment.created_at).toString()} by:{" "}
-                {convert(comment.created_by)}
+                posted{" "}
+                {moment(comment.created_at)
+                  .fromNow()
+                  .toString()}{" "}
+                by <i>{convert(comment.created_by)}</i>
               </p>
               {comment.created_by === user._id && (
                 <button id={comment._id} onClick={deleteComment}>
