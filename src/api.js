@@ -51,3 +51,8 @@ export const deleteArticle = id => axios.delete(`${URL}/articles `);
 export const getAll = item => {
   return axios.get(`${URL}/${item}`).then(({ data }) => data);
 };
+
+export const addUser = (username, password, name, avatar_url) =>
+  axios
+    .post(`${URL}/users`, { username, password, name, avatar_url })
+    .then(({ data }) => data.user);

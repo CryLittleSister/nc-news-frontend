@@ -12,9 +12,9 @@ const Header = () => {
           alt="northcoders logo"
         />
       </Link>
-      <h1 className="App-title">News</h1>
+
       <Link className="link" to="/articles">
-        Articles
+        <h1 className="App-title">News</h1>
       </Link>
     </header>
   );

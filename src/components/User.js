@@ -22,7 +22,15 @@ class User extends Component {
 
     return (
       <div id="userInfo">
-        <img src={user.avatar_url} alt="user profile avatar" id="userPic" />
+        <img
+          src={user.avatar_url}
+          alt="user profile avatar"
+          id="userPic"
+          onError={e => {
+            e.target.src =
+              "http://www.landstromcenter.com/Websites/landstromcenter/images/staff/placeholder.jpg";
+          }}
+        />
         <div id="userText">
           <h2 id="userUsername"> {user.username}</h2>
           {user.name}

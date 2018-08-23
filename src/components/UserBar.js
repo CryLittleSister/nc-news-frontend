@@ -2,18 +2,32 @@ import React, { Component } from "react";
 import Login from "./Login";
 import UserInfo from "./UserInfo";
 import PT from "prop-types";
+import { Link } from "react-router-dom";
 
 class UserBar extends Component {
   state = { username: "", password: "" };
 
   render() {
+    let { pathname } = this.props.location;
     const { currentUser } = this.props;
     return (
       <div id="userBar">
+        {/\/users\//.test(pathname) || /^\/$/.test(pathname) ? (
+          <Link className="link" to="/articles">
+            <p id="backArticles"> All Articles</p>
+          </Link>
+        ) : (
+          <p />
+        )}
         {currentUser.username ? (
-          <UserInfo logout={this.props.logout} user={currentUser} />
+          <UserInfo
+            className="login"
+            logout={this.props.logout}
+            user={currentUser}
+          />
         ) : (
           <Login
+            className="login"
             handleChange={this.handleChange}
             handleLogin={this.handleLogin}
             password={this.state.password}
@@ -39,7 +53,7 @@ class UserBar extends Component {
   };
 
   handleChange = event => {
-    let key = event.target.id;
+    let key = event.target.className;
     let val = event.target.value;
     let obj = {};
     obj[key] = val;

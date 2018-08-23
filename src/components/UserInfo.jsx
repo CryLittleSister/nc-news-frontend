@@ -13,7 +13,7 @@ const UserInfo = ({ user, logout }) => {
               src={user.avatar_url}
               onError={e => {
                 e.target.src =
-                  "https://i.pinimg.com/736x/54/51/b1/5451b1758687ce3e6e6ecee798b396f8--little-miss-plush.jpg";
+                  "http://www.landstromcenter.com/Websites/landstromcenter/images/staff/placeholder.jpg";
               }}
               alt="user avatar"
             />

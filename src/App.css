@@ -37,6 +37,23 @@
   grid-template-columns: 30% 70%;
 }
 
+.errText {
+  color: red;
+}
+
+#userBar {
+  text-align: right;
+  padding-right: 30px;
+  display: grid;
+  grid-template-columns: 50% 50%;
+}
+
+.backArticles {
+  margin-left: 20px;
+  font-size: 30px;
+  text-align: left;
+}
+
 #userInfo {
   display: grid;
   grid-template-columns: 40% 60%;
@@ -189,10 +206,6 @@ button:disabled {
   border: 1px solid #999999;
   background-color: #cccccc;
   color: #666666;
-}
-#userBar {
-  text-align: right;
-  padding-right: 30px;
 }
 
 /* flexgrow: 1 

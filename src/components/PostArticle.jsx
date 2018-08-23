@@ -1,13 +1,17 @@
 import React from "react";
 import { Redirect } from "react-router-dom";
 import PT from "prop-types";
+import { Link } from "react-router-dom";
 
 const PostArticle = ({ postArticle, handleChange, redirect, newArticle }) => {
   if (redirect) return <Redirect to={`/article/${newArticle._id}`} />;
   return (
     <div className="articles">
+      <Link className="link backArticles" to="/articles">
+        <i className="fas fa-arrow-left backArticles"> Back to All Articles</i>
+      </Link>
       <form>
-        <select id="topicDropdownInput" onChange={handleChange}>
+        <select className="topicDropdownInput" onChange={handleChange}>
           <option selected disabled>
             Choose a topic
           </option>
@@ -16,13 +20,13 @@ const PostArticle = ({ postArticle, handleChange, redirect, newArticle }) => {
           <option value="football">football</option>
         </select>{" "}
         <input
-          id="articleTitleInput"
+          className="articleTitleInput"
           onChange={handleChange}
           placeholder="article title"
         />{" "}
         <br />
         <textarea
-          id="articleBodyInput"
+          className="articleBodyInput"
           onChange={handleChange}
           placeholder="type your article into here"
           rows="25"

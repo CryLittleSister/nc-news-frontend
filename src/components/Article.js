@@ -19,6 +19,7 @@ class Article extends Component {
 
   componentDidMount() {
     const { match } = this.props;
+
     api
       .getSingleItem(match.params.article_id, "articles")
       .then(({ article }) => {
@@ -31,75 +32,82 @@ class Article extends Component {
     if (!article.title) return <div>loading...</div>;
     if (this.state.redirect) return <Redirect to={`/articles`} />;
     return (
-      <div id="article" key={article._id}>
-        <Link to="/articles">
-          <i class="fas fa-arrow-left">Back to Articles</i>
-        </Link>
-        <h2>{article.title}</h2>
-        <article>{article.body}</article>
-        score:{" "}
-        <span
-          className={
-            this.props.user.votes &&
-            this.props.user.votes.articles[article._id] &&
-            "voted"
-          }
-        >
-          {article.votes + (voteChange.articles[article._id] || 0)}
-        </span>
-        {!this.props.user.votes ||
-        !this.props.user.votes.articles[article._id] ? (
-          <Vote handleClick={this.vote} item={article} itemType="articles" />
-        ) : (
-          <UndoVote
-            handleClick={this.vote}
-            dir={
-              this.props.user.votes.articles[article._id] === 1 ? "down" : "up"
-            }
-            id={article._id}
-            itemType="articles"
-          />
-        )}
-        {article.created_by === this.props.user._id && (
-          <button id={article._id} onClick={this.deleteArticle}>
-            DELETE ARTICLE
-          </button>
-        )}
-        <p className="smallerText">
-          posted{" "}
-          {moment(article.created_at)
-            .fromNow()
-            .toString()}{" "}
-          by{" "}
-          <Link to={`/users/${article.created_by}`}>
+      <div>
+        <Link className="link" to="/articles">
+          <i className="fas fa-arrow-left backArticles">
             {" "}
-            {this.convertUsernameFromID(article.created_by)}{" "}
-          </Link>
-        </p>
-        <button
-          className="myButton"
-          onClick={() => this.showComments(article.comments)}
-        >
-          {this.state.comments.length === 0 ? "comments" : "hide comments"}
-        </button>
-        ({article.comments + this.state.commentsAdded}) <br />
-        <form>
-          <input
-            onChange={this.handleChange}
-            placeholder="add comment..."
-            value={this.state.commentBodyInput}
-            id="commentBodyInput"
+            Back to All Articles
+          </i>
+        </Link>
+        <div id="article" key={article._id}>
+          <h2>{article.title}</h2>
+          <article>{article.body}</article>
+          score:{" "}
+          <span
+            className={
+              this.props.user.votes &&
+              this.props.user.votes.articles[article._id] &&
+              "voted"
+            }
+          >
+            {article.votes + (voteChange.articles[article._id] || 0)}
+          </span>
+          {!this.props.user.votes ||
+          !this.props.user.votes.articles[article._id] ? (
+            <Vote handleClick={this.vote} item={article} itemType="articles" />
+          ) : (
+            <UndoVote
+              handleClick={this.vote}
+              dir={
+                this.props.user.votes.articles[article._id] === 1
+                  ? "down"
+                  : "up"
+              }
+              id={article._id}
+              itemType="articles"
+            />
+          )}
+          {article.created_by === this.props.user._id && (
+            <button id={article._id} onClick={this.deleteArticle}>
+              DELETE ARTICLE
+            </button>
+          )}
+          <p className="smallerText">
+            posted{" "}
+            {moment(article.created_at)
+              .fromNow()
+              .toString()}{" "}
+            by{" "}
+            <Link to={`/users/${article.created_by}`}>
+              {" "}
+              {this.convertUsernameFromID(article.created_by)}{" "}
+            </Link>
+          </p>
+          <button
+            className="myButton"
+            onClick={() => this.showComments(article.comments)}
+          >
+            {this.state.comments.length === 0 ? "comments" : "hide comments"}
+          </button>
+          ({article.comments + this.state.commentsAdded}) <br />
+          <form>
+            <input
+              onChange={this.handleChange}
+              placeholder="add comment..."
+              value={this.state.commentBodyInput}
+              id="commentBodyInput"
+            />
+            <button onClick={this.postComment}>post</button>
+          </form>
+          <Comments
+            convert={this.convertUsernameFromID}
+            comments={this.state.comments}
+            vote={this.vote}
+            user={this.props.user}
+            deleteComment={this.deleteComment}
+            voteChange={this.state.voteChange.comments}
           />
-          <button onClick={this.postComment}>post</button>
-        </form>
-        <Comments
-          convert={this.convertUsernameFromID}
-          comments={this.state.comments}
-          vote={this.vote}
-          user={this.props.user}
-          deleteComment={this.deleteComment}
-          voteChange={this.state.voteChange.comments}
-        />
+        </div>
       </div>
     );
   }

@@ -1,5 +1,6 @@
 import React from "react";
 import PT from "prop-types";
+import { Link } from "react-router-dom";
 
 const Login = ({ handleLogin, handleChange, password }) => {
   return (
@@ -8,18 +9,20 @@ const Login = ({ handleLogin, handleChange, password }) => {
         <input
           autoFocus
           type="text"
-          id="username"
+          className="username"
           placeholder="enter username"
           onChange={handleChange}
         />
         <input
           type="password"
-          id="password"
+          className="password"
           placeholder="enter password"
           onChange={handleChange}
         />
         <button onClick={handleLogin}>log in</button>
-        {/* <button>create new user</button> */}
+        <Link to="/users/create">
+          <button>create new user</button>
+        </Link>
       </form>
     </div>
   );

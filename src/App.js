@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import { Route, Switch } from "react-router-dom";
+import { Route, Switch, Router } from "react-router-dom";
 import Homepage from "./components/Homepage";
 import Header from "./components/Header";
 import Error404 from "./components/Error404";
@@ -10,6 +10,7 @@ import Article from "./components/Article";
 import PostArticle from "./components/PostArticle";
 import User from "./components/User";
 import * as api from "./api";
+import CreateUser from "./components/CreateUser";
 
 class App extends Component {
   state = {
@@ -37,11 +38,18 @@ class App extends Component {
     return (
       <div className="App">
         <Header />
-        <UserBar
-          users={this.state.users}
-          setCurrentUser={this.setCurrentUser}
-          currentUser={this.state.currentUser}
-          logout={this.logout}
+        <Route
+          path="/"
+          render={props => (
+            <UserBar
+              {...this.props}
+              users={this.state.users}
+              setCurrentUser={this.setCurrentUser}
+              currentUser={this.state.currentUser}
+              logout={this.logout}
+              {...props}
+            />
+          )}
         />
 
         <Switch>
@@ -68,6 +76,7 @@ class App extends Component {
               />
             )}
           />
+          <Route path="/users/create" component={CreateUser} />
           <Route path="/users/:user_id" component={User} />
           <Route
             exact
@@ -143,7 +152,7 @@ class App extends Component {
   };
 
   handleChange = e => {
-    let key = e.target.id;
+    let key = e.target.className;
     let val = e.target.value;
     let obj = {};
     obj[key] = val;
