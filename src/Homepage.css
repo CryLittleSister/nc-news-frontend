@@ -1,0 +1,24 @@
+.homeWrapper {
+  display: grid;
+  grid-template-columns: 30% 70%;
+}
+
+.singleArticleImage {
+  width: 70%;
+  height: 40%;
+}
+
+.singleArticleTitle {
+  font-size: 30px;
+}
+
+.homeArts {
+  grid-column: 2 / 3;
+  font-size: 50px;
+}
+
+.homeA {
+  font-size: 30px;
+  margin: 0px;
+  padding: 0px;
+}

@@ -1,0 +1,35 @@
+.articleImage {
+  height: 350px;
+  width: 350px;
+  grid-column: 1 / 2;
+}
+
+.voted {
+  color: red;
+}
+
+#article {
+  text-align: center;
+}
+
+.articles {
+  text-align: center;
+}
+
+.articleList {
+  text-align: center;
+  display: grid;
+}
+
+.articleTitles {
+  border: 2px black dotted;
+  border-radius: 20%;
+  font-size: 40px;
+  color: whitesmoke;
+}
+
+.smallerText {
+  font-family: "Montserrat", sans-serif;
+  font-size: 15px;
+  font-style: italic;
+}

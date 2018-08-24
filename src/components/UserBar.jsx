@@ -3,6 +3,7 @@ import Login from "./Login";
 import UserInfo from "./UserInfo";
 import PT from "prop-types";
 import { Link } from "react-router-dom";
+import "../Users.css";
 
 class UserBar extends Component {
   state = { username: "", password: "" };
@@ -14,7 +15,7 @@ class UserBar extends Component {
       <div id="userBar">
         {/\/users\//.test(pathname) || /^\/$/.test(pathname) ? (
           <Link className="link" to="/articles">
-            <p id="backArticles"> All Articles</p>
+            <p className="backArticles"> All Articles</p>
           </Link>
         ) : (
           <p />
@@ -30,7 +31,6 @@ class UserBar extends Component {
             className="login"
             handleChange={this.handleChange}
             handleLogin={this.handleLogin}
-            password={this.state.password}
           />
         )}
       </div>
@@ -41,7 +41,6 @@ class UserBar extends Component {
     e.preventDefault();
     const { username, password } = this.state;
     let userCheck = null;
-    console.log(password);
     this.props.users.forEach(user => {
       if (user.username === username.toLowerCase()) userCheck = user;
     });
@@ -62,7 +61,10 @@ class UserBar extends Component {
 }
 
 UserBar.propTypes = {
-  currentUser: PT.object
+  currentUser: PT.object,
+  users: PT.array.isRequired,
+  setCurrentUser: PT.func.isRequired,
+  logout: PT.func.isRequired
 };
 
 export default UserBar;

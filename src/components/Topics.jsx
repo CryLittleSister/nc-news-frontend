@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import React, { Component } from "react";
 import * as api from "../api";
+import PT from "prop-types";
 
 class Topics extends Component {
   state = { topics: [] };
@@ -36,5 +37,9 @@ class Topics extends Component {
     });
   };
 }
+
+Topics.propTypes = {
+  disabled: PT.string.isRequired
+};
 
 export default Topics;

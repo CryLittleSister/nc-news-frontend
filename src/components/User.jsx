@@ -1,9 +1,10 @@
 import React, { Component } from "react";
 import * as api from "../api";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
+import "../Users.css";
 
 class User extends Component {
-  state = { user: {}, articles: [] };
+  state = { user: {}, articles: [], err: false };
 
   componentDidMount() {
     this.getUser();
@@ -18,6 +19,8 @@ class User extends Component {
   }
 
   render() {
+    if (this.state.err) return <Redirect to={`/error${this.state.err}`} />;
+
     let { user, articles } = this.state;
 
     return (
@@ -34,17 +37,21 @@ class User extends Component {
         <div id="userText">
           <h2 id="userUsername"> {user.username}</h2>
           {user.name}
-
-          {articles.map(article => {
-            return (
-              <div key={article._id}>
-                <Link to={`/article/${article._id}`} id="userArticles">
-                  {article.title}
-                </Link>
-                <br />
-              </div>
-            );
-          })}
+          's most recent articles
+          {articles
+            .sort(
+              (a, b) => new Date(b["created_at"]) - new Date(a["created_at"])
+            )
+            .map(article => {
+              return (
+                <div key={article._id}>
+                  <Link to={`/article/${article._id}`} id="userArticles">
+                    {article.title}
+                  </Link>
+                  <br />
+                </div>
+              );
+            })}
         </div>
       </div>
     );
@@ -52,9 +59,10 @@ class User extends Component {
 
   getUser = () => {
     const { match } = this.props;
-    api.getSingleItem(match.params.user_id, "users").then(({ user }) => {
-      this.setState({ user });
-    });
+    api
+      .getSingleItem(match.params.user_id, "users")
+      .then(({ user }) => this.setState({ user }))
+      .catch(err => this.setState({ err: err.response.status }));
   };
 
   getUserArticles = () => {

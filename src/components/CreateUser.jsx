@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import * as api from "../api";
 import { Redirect } from "react-router-dom";
+import "../Error.css";
 import PT from "prop-types";
 
 class CreateUser extends Component {
@@ -24,24 +25,32 @@ class CreateUser extends Component {
           className="name"
           onChange={this.handleChange}
         />
-        {this.state.errName && <p className="errText">* required</p>}
-        <br />
+        {this.state.errName ? <p className="errText">* required</p> : <br />}
+
         <input
           type="text"
           placeholder="username"
           className="username"
           onChange={this.handleChange}
         />
-        {this.state.errUsername && <p className="errText">* required</p>}
-        <br />
+        {this.state.errUsername ? (
+          <p className="errText">* required</p>
+        ) : (
+          <br />
+        )}
+
         <input
           type="text"
           placeholder="password"
           className="password"
           onChange={this.handleChange}
         />
-        {this.state.errPassword && <p className="errText">* required</p>}
-        <br />
+        {this.state.errPassword ? (
+          <p className="errText">* required</p>
+        ) : (
+          <br />
+        )}
+
         <input
           type="text"
           placeholder="avatar url"
@@ -67,16 +76,29 @@ class CreateUser extends Component {
   createUser = e => {
     e.preventDefault();
     let { username, password, name, avatarURL } = this.state;
-    !name
-      ? this.setState({ errName: true })
-      : !username
-        ? this.setState({ errUsername: true, errName: false })
-        : !password
-          ? this.setState({ errPassword: true, errUsername: false })
-          : api
-              .addUser(username, password, name, avatarURL)
-              .then(user => this.setState({ redirect: true, user }));
+    let stop = false;
+    this.props.users.forEach(user => {
+      if (user.username === username) {
+        alert("ERROR: This username is already taken. Please choose another");
+        stop = true;
+      }
+    });
+
+    if (!stop)
+      !name
+        ? this.setState({ errName: true })
+        : !username
+          ? this.setState({ errUsername: true, errName: false })
+          : !password
+            ? this.setState({ errPassword: true, errUsername: false })
+            : api
+                .addUser(username, password, name, avatarURL)
+                .then(user => this.setState({ redirect: true, user }));
   };
 }
+
+CreateUser.propTypes = {
+  users: PT.array.isRequired
+};
 
 export default CreateUser;

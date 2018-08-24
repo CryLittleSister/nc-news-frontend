@@ -6,6 +6,7 @@ import PT from "prop-types";
 import UndoVote from "./UndoVote";
 import { Redirect, Link } from "react-router-dom";
 import moment from "moment";
+import "../Articles.css";
 
 class Article extends Component {
   state = {
@@ -14,23 +15,27 @@ class Article extends Component {
     voteChange: { comments: {}, articles: {} },
     commentBodyInput: "",
     commentsAdded: 0,
-    className: { comments: {}, articles: {} }
+    err: false
   };
 
   componentDidMount() {
-    const { match } = this.props;
-
-    api
-      .getSingleItem(match.params.article_id, "articles")
-      .then(({ article }) => {
-        this.setState({ article });
-      });
+    this.getArticle();
   }
 
   render() {
-    const { article, voteChange } = this.state;
+    const {
+      article,
+      voteChange,
+      err,
+      redirect,
+      commentsAdded,
+      commentBodyInput,
+      comments
+    } = this.state;
+    const { user } = this.props;
+    if (err) return <Redirect to={`/error${err}`} />;
     if (!article.title) return <div>loading...</div>;
-    if (this.state.redirect) return <Redirect to={`/articles`} />;
+    if (redirect) return <Redirect to={`/articles`} />;
     return (
       <div>
         <Link className="link" to="/articles">
@@ -40,34 +45,32 @@ class Article extends Component {
           </i>
         </Link>
         <div id="article" key={article._id}>
-          <h2>{article.title}</h2>
-          <article>{article.body}</article>
+          <h2 className="singleArticleTitle">{article.title}</h2>
+          <img
+            src={article.img}
+            alt={article.belongs_to}
+            className="singleArticleImage"
+          />
+          <article className="articleText">{article.body}</article>
           score:{" "}
           <span
             className={
-              this.props.user.votes &&
-              this.props.user.votes.articles[article._id] &&
-              "voted"
+              user.votes && user.votes.articles[article._id] && "voted"
             }
           >
             {article.votes + (voteChange.articles[article._id] || 0)}
           </span>
-          {!this.props.user.votes ||
-          !this.props.user.votes.articles[article._id] ? (
+          {!user.votes || !user.votes.articles[article._id] ? (
             <Vote handleClick={this.vote} item={article} itemType="articles" />
           ) : (
             <UndoVote
               handleClick={this.vote}
-              dir={
-                this.props.user.votes.articles[article._id] === 1
-                  ? "down"
-                  : "up"
-              }
+              dir={user.votes.articles[article._id] === 1 ? "down" : "up"}
               id={article._id}
               itemType="articles"
             />
           )}
-          {article.created_by === this.props.user._id && (
+          {article.created_by === user._id && (
             <button id={article._id} onClick={this.deleteArticle}>
               DELETE ARTICLE
             </button>
@@ -78,7 +81,7 @@ class Article extends Component {
               .fromNow()
               .toString()}{" "}
             by{" "}
-            <Link to={`/users/${article.created_by}`}>
+            <Link className="link" to={`/users/${article.created_by}`}>
               {" "}
               {this.convertUsernameFromID(article.created_by)}{" "}
             </Link>
@@ -89,53 +92,69 @@ class Article extends Component {
           >
             {this.state.comments.length === 0 ? "comments" : "hide comments"}
           </button>
-          ({article.comments + this.state.commentsAdded}) <br />
+          ({article.comments + commentsAdded}) <br />
           <form>
             <input
               onChange={this.handleChange}
               placeholder="add comment..."
-              value={this.state.commentBodyInput}
+              value={commentBodyInput}
               id="commentBodyInput"
             />
             <button onClick={this.postComment}>post</button>
           </form>
           <Comments
             convert={this.convertUsernameFromID}
-            comments={this.state.comments}
+            comments={comments}
             vote={this.vote}
-            user={this.props.user}
+            user={user}
             deleteComment={this.deleteComment}
-            voteChange={this.state.voteChange.comments}
+            voteChange={voteChange.comments}
           />
         </div>
       </div>
     );
   }
 
+  getArticle = () => {
+    const { article_id } = this.props.match.params;
+
+    api
+      .getSingleItem(article_id, "articles")
+      .then(({ article }) => {
+        article.img =
+          article.belongs_to === "football"
+            ? "https://brightcove04pmdo-a.akamaihd.net/4221396001/4221396001_5690886054001_5690865152001-vs.jpg?pubId=4221396001&videoId=5690865152001"
+            : article.belongs_to === "coding"
+              ? "https://media.boingboing.net/wp-content/uploads/2018/05/sale_15014_primary_image_wide.jpg"
+              : "https://3gwtod2hg0th1ikege3y0nok-wpengine.netdna-ssl.com/wp-content/uploads/2016/09/Screen-Shot-2016-09-07-at-22.15.40-1024x397.png";
+        this.setState({ article });
+      })
+      .catch(err => this.setState({ err: err.response.status }));
+  };
+
   showComments = articleComments => {
-    this.state.comments.length === 0 && articleComments !== 0
+    const { comments, article } = this.state;
+    comments.length === 0 && articleComments !== 0
       ? api
-          .getComments(this.state.article._id)
+          .getComments(article._id)
           .then(comments => this.setState({ comments }))
       : this.setState({ comments: [] });
   };
 
   postComment = e => {
+    const { commentBodyInput, article, commentsAdded } = this.state;
+    const { _id } = this.props.user;
     e.preventDefault();
-    !this.props.user._id
+    !_id
       ? alert("you must be logged in to post a new comment")
-      : !this.state.commentBodyInput
+      : !commentBodyInput
         ? alert("comments cannot be blank")
         : api
-            .postComment(
-              this.state.commentBodyInput,
-              this.props.user._id,
-              this.state.article._id
-            )
+            .postComment(commentBodyInput, _id, article._id)
             .then(newComment => {
               let comments = [...this.state.comments];
               comments.push(newComment);
-              let num = this.state.commentsAdded;
+              let num = commentsAdded;
               this.setState({
                 commentBodyInput: "",
                 commentsAdded: (num += 1),
@@ -145,10 +164,8 @@ class Article extends Component {
   };
 
   vote = (id, direction, item) => {
-    let voteChange = { ...this.state.voteChange };
+    let { voteChange } = { ...this.state };
     let { user } = { ...this.props };
-    voteChange[item][id] = user.votes[item][id];
-
     if (!user.username) alert("you must be logged in to cast your vote");
     else if (!user.votes[item][id]) {
       user.votes[item][id] = direction === "up" ? 1 : -1;
@@ -165,6 +182,7 @@ class Article extends Component {
         direction === "up"
           ? voteChange[item][id] + 1
           : voteChange[item][id] - 1;
+
       api.handleVote(id, direction, user._id, item, true);
       this.setState({ voteChange });
     }

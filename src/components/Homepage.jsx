@@ -1,6 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import moment from "moment";
+import "../Homepage.css";
+import PT from "prop-types";
 
 const Homepage = ({ articles, sortBy, sort }) => {
   return (
@@ -51,6 +53,12 @@ const Homepage = ({ articles, sortBy, sort }) => {
       })}
     </div>
   );
+};
+
+Homepage.propTypes = {
+  sortBy: PT.string.isRequired,
+  articles: PT.array.isRequired,
+  sort: PT.func.isRequired
 };
 
 export default Homepage;

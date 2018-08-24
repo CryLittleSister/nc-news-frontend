@@ -23,7 +23,9 @@ const Comments = ({
               <p>{comment.body}</p>
               score:{" "}
               <span
-                className={user && user.votes.comments[comment._id] && "voted"}
+                className={
+                  user.votes && user.votes.comments[comment._id] && "voted"
+                }
               >
                 {comment.votes + (voteChange[comment._id] || 0)}{" "}
               </span>
@@ -43,7 +45,7 @@ const Comments = ({
                   .fromNow()
                   .toString()}{" "}
                 by{" "}
-                <Link to={`/users/${comment.created_by}`}>
+                <Link className="link" to={`/users/${comment.created_by}`}>
                   {convert(comment.created_by)}
                 </Link>
               </p>
@@ -63,7 +65,9 @@ Comments.propTypes = {
   convert: PT.func.isRequired,
   vote: PT.func.isRequired,
   deleteComment: PT.func.isRequired,
-  comments: PT.array.isRequired
+  comments: PT.array.isRequired,
+  user: PT.object,
+  voteChange: PT.object.isRequired
 };
 
 export default Comments;

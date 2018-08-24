@@ -1,14 +1,14 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const Error404 = () => {
+const Error400 = () => {
   return (
     <div className="error">
       <Link to="/">
         {" "}
         <img
           id="error404"
-          src="https://cdn.dribbble.com/users/183518/screenshots/1766471/agigen-404.gif"
+          src="https://i2.wp.com/errorcodespro.com/wp-content/uploads/2016/12/error400Badrequest.jpg?fit=550%2C550&ssl=1"
           alt="404 error"
         />
       </Link>
@@ -16,4 +16,4 @@ const Error404 = () => {
   );
 };
 
-export default Error404;
+export default Error400;

@@ -1,8 +1,8 @@
 import React from "react";
-import PT from "prop-types";
 import { Link } from "react-router-dom";
+import PT from "prop-types";
 
-const Login = ({ handleLogin, handleChange, password }) => {
+const Login = ({ handleLogin, handleChange }) => {
   return (
     <div>
       <form>

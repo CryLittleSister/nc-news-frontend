@@ -1,0 +1,10 @@
+.error {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-image: "https://cdn.dribbble.com/users/183518/screenshots/1766471/agigen-404.gif";
+}
+
+.errText {
+  color: red;
+}

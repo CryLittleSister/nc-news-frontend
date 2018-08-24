@@ -1,11 +1,11 @@
 import React, { Component } from "react";
-import { Link } from "react-router-dom";
+import { Link, Redirect } from "react-router-dom";
 import * as api from "../api";
 import Topics from "./Topics";
 import moment from "moment";
 
 class Articles extends Component {
-  state = { articles: [] };
+  state = { articles: [], err: false };
 
   componentDidMount() {
     this.getArticles();
@@ -19,10 +19,12 @@ class Articles extends Component {
   }
 
   render() {
+    let { err, articles } = this.state;
+    if (err) return <Redirect to={`/error${err}`} />;
     return (
       <div className="articleList">
         <Topics disabled={this.props.match.params.topic || "all"} />
-        {this.state.articles.map(article => {
+        {articles.map(article => {
           return (
             <Link
               key={article._id}
@@ -52,7 +54,10 @@ class Articles extends Component {
 
     !topic
       ? api.getAll("articles").then(set)
-      : api.getArticlesByTopic(topic).then(set);
+      : api
+          .getArticlesByTopic(topic)
+          .then(set)
+          .catch(err => this.setState({ err: err.response.status }));
   };
 }
 

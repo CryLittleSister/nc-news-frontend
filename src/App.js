@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import "./App.css";
-import { Route, Switch, Router } from "react-router-dom";
+import { Route, Switch } from "react-router-dom";
 import Homepage from "./components/Homepage";
 import Header from "./components/Header";
 import Error404 from "./components/Error404";
@@ -11,6 +11,7 @@ import PostArticle from "./components/PostArticle";
 import User from "./components/User";
 import * as api from "./api";
 import CreateUser from "./components/CreateUser";
+import Error400 from "./components/Error400";
 
 class App extends Component {
   state = {
@@ -76,7 +77,10 @@ class App extends Component {
               />
             )}
           />
-          <Route path="/users/create" component={CreateUser} />
+          <Route
+            path="/users/create"
+            render={() => <CreateUser users={this.state.users} />}
+          />
           <Route path="/users/:user_id" component={User} />
           <Route
             exact
@@ -89,7 +93,8 @@ class App extends Component {
               />
             )}
           />
-          <Route path="/*" component={Error404} />
+          <Route path="/error400" component={Error400} />
+          <Route path={"/*" || "/error404"} component={Error404} />
         </Switch>
       </div>
     );
@@ -125,20 +130,26 @@ class App extends Component {
 
   postArticle = e => {
     e.preventDefault();
-    !this.state.currentUser._id
+    let {
+      topicDropdownInput,
+      articleTitleInput,
+      articleBodyInput,
+      currentUser
+    } = this.state;
+    !currentUser._id
       ? alert("you must be logged in to post a new article")
-      : !this.state.topicDropdownInput
+      : !topicDropdownInput
         ? alert("please choose a topic")
-        : !this.state.articleTitleInput
+        : !articleTitleInput
           ? alert("please give your article a title")
-          : !/.{20}/.test(this.state.articleBodyInput)
+          : !/.{20}/.test(articleBodyInput)
             ? alert("articles must contain no fewer than 20 characters")
             : api
                 .postArticle(
-                  this.state.topicDropdownInput,
-                  this.state.articleTitleInput,
-                  this.state.articleBodyInput,
-                  this.state.currentUser._id
+                  topicDropdownInput,
+                  articleTitleInput,
+                  articleBodyInput,
+                  currentUser._id
                 )
                 .then(article =>
                   this.setState({

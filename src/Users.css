@@ -1,0 +1,49 @@
+.avatar {
+  height: 100px;
+  width: 100px;
+  border: 3px solid black;
+  margin-left: 10px;
+  margin-bottom: 0px;
+}
+
+.backArticles {
+  margin-left: 20px;
+  font-size: 30px;
+  text-align: left;
+  grid-column: 1 / 2;
+}
+
+#userInfo {
+  display: grid;
+  grid-template-columns: 40% 60%;
+  grid-template-rows: 40% 60%;
+}
+
+#userPic {
+  height: 500px;
+  width: 100%;
+  grid-row: 1/2;
+  grid-column: 1/2;
+}
+
+#userText {
+  padding-left: 20px;
+  grid-column: 2/3;
+  grid-row: 1/2;
+}
+
+#userArticles {
+  font-size: 25px;
+  text-decoration: none;
+  color: pink;
+}
+
+#loggedUsername {
+  margin-left: 10px;
+  font-size: 30px;
+  margin-top: 0px;
+}
+
+#userUsername {
+  font-size: 40px;
+}
