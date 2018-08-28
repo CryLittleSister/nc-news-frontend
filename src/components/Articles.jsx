@@ -5,15 +5,16 @@ import Topics from "./Topics";
 import moment from "moment";
 
 class Articles extends Component {
-  state = { articles: [], err: false };
+  state = { articles: [], err: false, sortBy: "title" };
 
   componentDidMount() {
     this.getArticles();
   }
 
-  componentDidUpdate(prevProps) {
+  componentDidUpdate(prevProps, prevState) {
     const { topic } = this.props.match.params;
-    if (topic !== prevProps.match.params.topic) {
+    const { sortBy } = this.state;
+    if (topic !== prevProps.match.params.topic || sortBy !== prevState.sortBy) {
       this.getArticles();
     }
   }
@@ -23,7 +24,10 @@ class Articles extends Component {
     if (err) return <Redirect to={`/error${err}`} />;
     return (
       <div className="articleList">
-        <Topics disabled={this.props.match.params.topic || "all"} />
+        <Topics
+          disabled={this.props.match.params.topic || "all"}
+          sort={this.sort}
+        />
         {articles.map(article => {
           return (
             <Link
@@ -50,14 +54,24 @@ class Articles extends Component {
 
   getArticles = () => {
     const { topic } = this.props.match.params;
-    let set = ({ articles }) => this.setState({ articles });
-
+    const { sortBy } = this.state;
+    let sortFunc =
+      sortBy === "created_at"
+        ? (a, b) => new Date(b[sortBy]) - new Date(a[sortBy])
+        : (a, b) => a[sortBy].localeCompare(b[sortBy]);
+    let set = ({ articles }) =>
+      this.setState({ articles: articles.sort(sortFunc) });
     !topic
       ? api.getAll("articles").then(set)
       : api
           .getArticlesByTopic(topic)
           .then(set)
           .catch(err => this.setState({ err: err.response.status }));
+  };
+
+  sort = e => {
+    let sortBy = e.target.className;
+    this.setState({ sortBy });
   };
 }
 

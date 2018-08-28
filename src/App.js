@@ -94,7 +94,7 @@ class App extends Component {
             )}
           />
           <Route path="/error400" component={Error400} />
-          <Route path={"/*" || "/error404"} component={Error404} />
+          <Route path={"*" || "/error404"} component={Error404} />
         </Switch>
       </div>
     );
@@ -113,7 +113,7 @@ class App extends Component {
   };
 
   sort = e => {
-    let sortBy = e.target.id;
+    let sortBy = e.target.className;
     this.setState({ sortBy });
   };
 

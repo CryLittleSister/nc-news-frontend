@@ -14,13 +14,21 @@ const Homepage = ({ articles, sortBy, sort }) => {
             ? "Most Talked About Articles"
             : "Most Recent Articles"}
       </h1>{" "}
-      <button onClick={sort} id="votes" disabled={sortBy === "votes"}>
+      <button onClick={sort} className="votes" disabled={sortBy === "votes"}>
         highest scores
       </button>
-      <button onClick={sort} id="comments" disabled={sortBy === "comments"}>
+      <button
+        onClick={sort}
+        className="comments"
+        disabled={sortBy === "comments"}
+      >
         most comments
       </button>
-      <button onClick={sort} id="created_at" disabled={sortBy === "created_at"}>
+      <button
+        onClick={sort}
+        className="created_at"
+        disabled={sortBy === "created_at"}
+      >
         most recent
       </button>
       {articles.map(article => {

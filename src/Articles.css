@@ -33,3 +33,28 @@
   font-size: 15px;
   font-style: italic;
 }
+
+#topics {
+  display: grid;
+  grid-template-columns: 40% 60%;
+  grid-template-rows: 80% 20%;
+}
+
+#sort {
+  grid-column: 1 / 2;
+  text-align: left;
+}
+
+#topicButtons {
+  grid-column: 2 / 3;
+  text-align: left;
+}
+
+#postLink {
+  grid-column: 2 / 3;
+  grid-row: 2 / 3;
+  text-align: left;
+  margin-left: 4%;
+  padding: 10px;
+  font-size: 23px;
+}
