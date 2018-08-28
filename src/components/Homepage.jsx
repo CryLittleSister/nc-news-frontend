@@ -45,7 +45,11 @@ const Homepage = ({ articles, sortBy, sort }) => {
             <img src={img} alt={article.belongs_to} className="articleImage" />
             <div className="homeArts">
               <Link className="link" to={`/article/${article._id}`}>
-                {article.title}
+                {article.title.replace(/\w\S*/g, function(txt) {
+                  return (
+                    txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+                  );
+                })}
               </Link>
               <p className="homeA">{article.belongs_to}</p>
               <p className="homeA">

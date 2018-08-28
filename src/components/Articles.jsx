@@ -37,7 +37,13 @@ class Articles extends Component {
               className="articleTitles"
               to={`/article/${article._id}`}
             >
-              <h2>{article.title}</h2>
+              <h2>
+                {article.title.replace(/\w\S*/g, function(txt) {
+                  return (
+                    txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase()
+                  );
+                })}
+              </h2>
               <p className="midText">
                 <b>{article.votes} </b>
                 votes | <b>{article.comments}</b> comments

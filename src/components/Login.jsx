@@ -19,9 +19,9 @@ const Login = ({ handleLogin, handleChange }) => {
           placeholder="enter password"
           onChange={handleChange}
         />
-        <button onClick={handleLogin}>log in</button>
+        <button onClick={handleLogin}>Log In</button>
         <Link to="/users/create">
-          <button>create new user</button>
+          <button>Create New User</button>
         </Link>
       </form>
     </div>

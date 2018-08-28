@@ -20,7 +20,7 @@ const UserInfo = ({ user, logout }) => {
           </Link>
 
           <h3 id="loggedUsername">{user.username}</h3>
-          <button onClick={logout}>logout</button>
+          <button onClick={logout}>Logout</button>
         </div>
       )}
     </div>

@@ -1,9 +1,3 @@
-.articleImage {
-  height: 350px;
-  width: 350px;
-  grid-column: 1 / 2;
-}
-
 .voted {
   color: red;
 }
@@ -26,6 +20,15 @@
   border-radius: 20%;
   font-size: 40px;
   color: whitesmoke;
+}
+
+.singleArticleTitle {
+  font-size: 30px;
+}
+
+.singleArticleImage {
+  width: 70%;
+  height: 40%;
 }
 
 .smallerText {

@@ -31,4 +31,4 @@ In order to use your app online you will need to host the database on [netlify](
 
 ### Users
 
-User 'Sparkle11' has the password <i>123</i>. All other users have the password <i>password</i>.
+User <i>Sparkle11</i> has the password <i>123</i>. All other users have the password <i>password</i>.

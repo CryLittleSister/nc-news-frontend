@@ -46,7 +46,11 @@ class Article extends Component {
           </i>
         </Link>
         <div id="article" key={article._id}>
-          <h2 className="singleArticleTitle">{article.title}</h2>
+          <h2 className="singleArticleTitle">
+            {article.title.replace(/\w\S*/g, function(txt) {
+              return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+            })}
+          </h2>
           <img
             src={article.img}
             alt={article.belongs_to}
