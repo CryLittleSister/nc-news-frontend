@@ -3,8 +3,10 @@ import { Link } from "react-router-dom";
 import moment from "moment";
 import "../Homepage.css";
 import PT from "prop-types";
+import Loader from "./Loader";
 
 const Homepage = ({ articles, sortBy, sort }) => {
+  if (!articles[0]) return <Loader />;
   return (
     <div>
       <h1>

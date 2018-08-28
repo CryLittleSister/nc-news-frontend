@@ -9,8 +9,8 @@ class UserBar extends Component {
   state = { username: "", password: "" };
 
   render() {
-    let { pathname } = this.props.location;
-    const { currentUser } = this.props;
+    const { pathname } = this.props.location;
+    const { currentUser, logout } = this.props;
     return (
       <div id="userBar">
         {/\/users\//.test(pathname) || /^\/$/.test(pathname) ? (
@@ -21,11 +21,7 @@ class UserBar extends Component {
           <p />
         )}
         {currentUser.username ? (
-          <UserInfo
-            className="login"
-            logout={this.props.logout}
-            user={currentUser}
-          />
+          <UserInfo className="login" logout={logout} user={currentUser} />
         ) : (
           <Login
             className="login"
@@ -40,15 +36,16 @@ class UserBar extends Component {
   handleLogin = e => {
     e.preventDefault();
     const { username, password } = this.state;
+    const { users, setCurrentUser } = this.props;
     let userCheck = null;
-    this.props.users.forEach(user => {
+    users.forEach(user => {
       if (user.username === username.toLowerCase()) userCheck = user;
     });
     !userCheck
       ? alert("There are no users with that username")
       : userCheck.password !== password
         ? alert("Incorrect password. Please try again")
-        : this.props.setCurrentUser(userCheck._id);
+        : setCurrentUser(userCheck._id);
   };
 
   handleChange = event => {

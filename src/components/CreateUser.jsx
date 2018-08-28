@@ -75,9 +75,10 @@ class CreateUser extends Component {
 
   createUser = e => {
     e.preventDefault();
-    let { username, password, name, avatarURL } = this.state;
+    const { username, password, name, avatarURL } = this.state;
+    const { users } = this.props;
     let stop = false;
-    this.props.users.forEach(user => {
+    users.forEach(user => {
       if (user.username === username) {
         alert("ERROR: This username is already taken. Please choose another");
         stop = true;

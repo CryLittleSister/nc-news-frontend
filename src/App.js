@@ -31,11 +31,19 @@ class App extends Component {
   }
 
   componentDidUpdate(...args) {
-    if (this.state.sortBy !== args[1].sortBy)
-      this.getSortedArticles(this.state.sortBy);
+    let { sortBy } = this.state;
+    if (sortBy !== args[1].sortBy) this.getSortedArticles(sortBy);
   }
 
   render() {
+    let {
+      users,
+      currentUser,
+      newPost,
+      redirect,
+      sortBy,
+      articles
+    } = this.state;
     return (
       <div className="App">
         <Header />
@@ -44,9 +52,9 @@ class App extends Component {
           render={props => (
             <UserBar
               {...this.props}
-              users={this.state.users}
+              users={users}
               setCurrentUser={this.setCurrentUser}
-              currentUser={this.state.currentUser}
+              currentUser={currentUser}
               logout={this.logout}
               {...props}
             />
@@ -59,8 +67,8 @@ class App extends Component {
             path="/articles/post"
             render={() => (
               <PostArticle
-                newArticle={this.state.newPost}
-                redirect={this.state.redirect}
+                newArticle={newPost}
+                redirect={redirect}
                 postArticle={this.postArticle}
                 handleChange={this.handleChange}
               />
@@ -70,27 +78,19 @@ class App extends Component {
           <Route
             path="/article/:article_id"
             render={props => (
-              <Article
-                user={this.state.currentUser}
-                users={this.state.users}
-                {...props}
-              />
+              <Article user={currentUser} users={users} {...props} />
             )}
           />
           <Route
             path="/users/create"
-            render={() => <CreateUser users={this.state.users} />}
+            render={() => <CreateUser users={users} />}
           />
           <Route path="/users/:user_id" component={User} />
           <Route
             exact
             path="/"
             render={props => (
-              <Homepage
-                articles={this.state.articles}
-                sortBy={this.state.sortBy}
-                sort={this.sort}
-              />
+              <Homepage articles={articles} sortBy={sortBy} sort={this.sort} />
             )}
           />
           <Route path="/error400" component={Error400} />

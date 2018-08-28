@@ -7,6 +7,7 @@ import UndoVote from "./UndoVote";
 import { Redirect, Link } from "react-router-dom";
 import moment from "moment";
 import "../Articles.css";
+import Loader from "./Loader";
 
 class Article extends Component {
   state = {
@@ -34,7 +35,7 @@ class Article extends Component {
     } = this.state;
     const { user } = this.props;
     if (err) return <Redirect to={`/error${err}`} />;
-    if (!article.title) return <div>loading...</div>;
+    if (!article.title) return <Loader />;
     if (redirect) return <Redirect to={`/articles`} />;
     return (
       <div>
@@ -90,7 +91,7 @@ class Article extends Component {
             className="myButton"
             onClick={() => this.showComments(article.comments)}
           >
-            {this.state.comments.length === 0 ? "comments" : "hide comments"}
+            {comments.length === 0 ? "comments" : "hide comments"}
           </button>
           ({article.comments + commentsAdded}) <br />
           <form>
@@ -216,7 +217,8 @@ class Article extends Component {
 
   convertUsernameFromID = id => {
     let key = {};
-    this.props.users.forEach(user => {
+    const { users } = this.props;
+    users.forEach(user => {
       key[`${user._id}`] = user.username;
     });
     return key[`${id}`];

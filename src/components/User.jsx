@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import * as api from "../api";
 import { Link, Redirect } from "react-router-dom";
 import "../Users.css";
+import Loader from "./Loader";
 
 class User extends Component {
   state = { user: {}, articles: [], err: false };
@@ -19,9 +20,11 @@ class User extends Component {
   }
 
   render() {
-    if (this.state.err) return <Redirect to={`/error${this.state.err}`} />;
+    const { user, articles, err } = this.state;
 
-    let { user, articles } = this.state;
+    if (!user.username) return <Loader />;
+
+    if (err) return <Redirect to={`/error${err}`} />;
 
     return (
       <div id="userInfo">
@@ -58,9 +61,9 @@ class User extends Component {
   }
 
   getUser = () => {
-    const { match } = this.props;
+    const { user_id } = this.props.match.params;
     api
-      .getSingleItem(match.params.user_id, "users")
+      .getSingleItem(user_id, "users")
       .then(({ user }) => this.setState({ user }))
       .catch(err => this.setState({ err: err.response.status }));
   };

@@ -3,9 +3,10 @@ import { Link, Redirect } from "react-router-dom";
 import * as api from "../api";
 import Topics from "./Topics";
 import moment from "moment";
+import Loader from "./Loader";
 
 class Articles extends Component {
-  state = { articles: [], err: false, sortBy: "title" };
+  state = { articles: [], err: false, sortBy: "created_at" };
 
   componentDidMount() {
     this.getArticles();
@@ -20,14 +21,15 @@ class Articles extends Component {
   }
 
   render() {
-    let { err, articles } = this.state;
+    const { err, articles, sortBy } = this.state;
+    const { topic } = this.props.match.params;
+
+    if (!articles[0]) return <Loader />;
+
     if (err) return <Redirect to={`/error${err}`} />;
     return (
       <div className="articleList">
-        <Topics
-          disabled={this.props.match.params.topic || "all"}
-          sort={this.sort}
-        />
+        <Topics disabled={topic || "all"} sort={this.sort} sortBy={sortBy} />
         {articles.map(article => {
           return (
             <Link

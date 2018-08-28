@@ -11,27 +11,35 @@ class Topics extends Component {
   }
 
   render() {
-    const { sort } = this.props;
+    const { sort, disabled, sortBy } = this.props;
+    const { topics } = this.state;
+
     return (
       <div id="topics">
         <div id="sort">
-          <button className="created_at" onClick={sort}>
+          <button
+            className="created_at"
+            onClick={sort}
+            disabled={sortBy === "created_at"}
+          >
             Most Recent
           </button>
-          <button className="title" onClick={sort}>
+          <button
+            className="title"
+            onClick={sort}
+            disabled={sortBy === "title"}
+          >
             Alphabetical
           </button>
         </div>
         <div id="topicButtons">
-          {this.state.topics.sort((a, b) => a.title > b.title).map(topic => (
+          {topics.sort((a, b) => a.title > b.title).map(topic => (
             <Link to={`/topics/${topic.slug}`} id={topic.slug} key={topic._id}>
-              <button disabled={this.props.disabled === topic.slug}>
-                {topic.title}
-              </button>
+              <button disabled={disabled === topic.slug}>{topic.title}</button>
             </Link>
           ))}{" "}
           <Link to="/articles">
-            <button disabled={this.props.disabled === "all"}>All</button>
+            <button disabled={disabled === "all"}>All</button>
           </Link>
           <br />
         </div>
@@ -51,7 +59,8 @@ class Topics extends Component {
 
 Topics.propTypes = {
   disabled: PT.string.isRequired,
-  sort: PT.func.isRequired
+  sort: PT.func.isRequired,
+  sortBy: PT.string.isRequired
 };
 
 export default Topics;
