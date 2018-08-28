@@ -17,21 +17,21 @@ const Homepage = ({ articles, sortBy, sort }) => {
             : "Most Recent Articles"}
       </h1>{" "}
       <button onClick={sort} className="votes" disabled={sortBy === "votes"}>
-        highest scores
+        Highest Scores
       </button>
       <button
         onClick={sort}
         className="comments"
         disabled={sortBy === "comments"}
       >
-        most comments
+        Most Comments
       </button>
       <button
         onClick={sort}
         className="created_at"
         disabled={sortBy === "created_at"}
       >
-        most recent
+        Most Recent
       </button>
       {articles.map(article => {
         let img =
